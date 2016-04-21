@@ -69,6 +69,12 @@
     <ClInclude Include="SpaceGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameComponent.h">
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderEngine.h">
+      <Filter>Header Files\RenderEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreEngine.cpp">
@@ -106,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="SpaceGame.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameComponent.cpp">
+      <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
