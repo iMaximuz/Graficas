@@ -20,8 +20,7 @@ void SpaceGame::Input( InputInfo input, GLfloat dt){
 
 
 	if ( input.keys[GLFW_KEY_ESCAPE] ) {
-		//this->LockMouse( false );
-		this->CloseWindow();
+		this->LockMouse( false );
 	}
 
 
