@@ -2,7 +2,6 @@
 #define _COREENGINE_H_
 
 
-
 enum {
 	GLEW_Failed,
 	CoreEngine_Failed,
@@ -14,7 +13,6 @@ class CoreEngine {
 
 	Window* window;
 	Game* game;
-	RenderEngine* renderEngine;
 
 	int state;
 

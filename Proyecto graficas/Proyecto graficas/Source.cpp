@@ -1,14 +1,8 @@
 #include<iostream>
 #include <string>
 
-//#include <glfw3.h>
 #include "CoreEngine.h"
 #include "SpaceGame.h"
-
-//#include "Shader.h"
-#include <SOIL\SOIL.h>
-//#include "MathLib.h"
-#include "Camera.h"
 
 #define WINDOW_WIDTH	800
 #define WINDOW_HEIGHT	600
@@ -20,50 +14,50 @@
 
 */
 
-
-
-bool keys[1024];
-Camera mainCamera(glm::vec3(0.0f, 1, 5.0f));
-GLfloat lastX = 400, lastY = 300;
-bool firstMouse = true;
-
-GLfloat lightPosY;
-
-
-void DoCameraMovement(Camera* camToMove, GLfloat deltaTime ) {
-
-	if ( keys[GLFW_KEY_W] )
-		camToMove->Move( FORWARD, deltaTime );
-	if ( keys[GLFW_KEY_S] )
-		camToMove->Move( BACKWARD, deltaTime );
-	if ( keys[GLFW_KEY_A] )
-		camToMove->Move( RIGHT, deltaTime );
-	if ( keys[GLFW_KEY_D] )
-		camToMove->Move( LEFT, deltaTime );
-	if ( keys[GLFW_KEY_SPACE] )
-		camToMove->Move( UP, deltaTime );
-	if ( keys[GLFW_KEY_LEFT_CONTROL] )
-		camToMove->Move( DOWN, deltaTime );
-	if ( keys[GLFW_KEY_LEFT_SHIFT] )
-		camToMove->Sprinting = true;
-	else
-		camToMove->Sprinting = false;
-}
-
-GLuint LoadTexture( const char* texturePath ) {
-
-	GLuint result;
-	glGenTextures( 1, &result );
-	int width, height;
-	unsigned char* image = SOIL_load_image( texturePath, &width, &height, 0, SOIL_LOAD_RGB );
-	glBindTexture( GL_TEXTURE_2D, result );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
-	glGenerateMipmap( GL_TEXTURE_2D );
-	SOIL_free_image_data( image );
-	glBindTexture( GL_TEXTURE_2D, 0 );
-
-	return result;
-}
+//
+//
+//bool keys[1024];
+//Camera mainCamera(glm::vec3(0.0f, 1, 5.0f));
+//GLfloat lastX = 400, lastY = 300;
+//bool firstMouse = true;
+//
+//GLfloat lightPosY;
+//
+//
+//void DoCameraMovement(Camera* camToMove, GLfloat deltaTime ) {
+//
+//	if ( keys[GLFW_KEY_W] )
+//		camToMove->Move( FORWARD, deltaTime );
+//	if ( keys[GLFW_KEY_S] )
+//		camToMove->Move( BACKWARD, deltaTime );
+//	if ( keys[GLFW_KEY_A] )
+//		camToMove->Move( RIGHT, deltaTime );
+//	if ( keys[GLFW_KEY_D] )
+//		camToMove->Move( LEFT, deltaTime );
+//	if ( keys[GLFW_KEY_SPACE] )
+//		camToMove->Move( UP, deltaTime );
+//	if ( keys[GLFW_KEY_LEFT_CONTROL] )
+//		camToMove->Move( DOWN, deltaTime );
+//	if ( keys[GLFW_KEY_LEFT_SHIFT] )
+//		camToMove->Sprinting = true;
+//	else
+//		camToMove->Sprinting = false;
+//}
+//
+//GLuint LoadTexture( const char* texturePath ) {
+//
+//	GLuint result;
+//	glGenTextures( 1, &result );
+//	int width, height;
+//	unsigned char* image = SOIL_load_image( texturePath, &width, &height, 0, SOIL_LOAD_RGB );
+//	glBindTexture( GL_TEXTURE_2D, result );
+//	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
+//	glGenerateMipmap( GL_TEXTURE_2D );
+//	SOIL_free_image_data( image );
+//	glBindTexture( GL_TEXTURE_2D, 0 );
+//
+//	return result;
+//}
 
 
 int main() {
