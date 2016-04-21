@@ -1,2 +1,4 @@
 # Graficas
-Graficas computacionales.
+
+- Licenciatura en Multimedia y Animacion Digital.
+- Graficas computacionales.
