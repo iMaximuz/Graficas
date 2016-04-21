@@ -162,6 +162,7 @@
     <ClInclude Include="MathLib.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Precompiled.h" />
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpaceGame.h" />

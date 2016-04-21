@@ -106,11 +106,9 @@ class Heightmap : public GameObject{
 
 	GLuint gridSize;
 	GLfloat worldSize;
-	GLuint sizeX;
-	GLuint sizeY;
+	GLuint worldSizeX;
+	GLuint worldSizeZ;
 	GLfloat maxHeight;
-
-
 
 public:
 
@@ -119,6 +117,8 @@ public:
 		this->gridSize = gridSize;
 		this->worldSize = worldSize;
 		this->maxHeight = maxHeight;
+		this->worldSizeZ = this->worldSizeX = worldSize / 2;
+
 
 		GenerateNewTerrain( seed, noiseSize, this->gridSize, this->worldSize, this->maxHeight );
 
@@ -137,6 +137,11 @@ public:
 	void GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSize, GLfloat worldSize, GLfloat maxHeight );
 
 	void LoadTerrain( const GLchar* path, GLfloat maxHeight );
+
+
+	inline glm::vec2 GetWorldSize() {
+		return glm::vec2(this->worldSizeX, this->worldSizeZ);
+	}
 
 };
 

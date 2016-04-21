@@ -72,6 +72,9 @@
     <ClInclude Include="SpaceGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Precompiled.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreEngine.cpp">

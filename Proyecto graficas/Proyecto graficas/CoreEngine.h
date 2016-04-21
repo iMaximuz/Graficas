@@ -1,12 +1,7 @@
 #ifndef _COREENGINE_H_
 #define _COREENGINE_H_
 
-#define GLEW_STATIC
-#include <glew.h>
-#include "Window.h"
-#include "Game.h"
-#include "RenderEngine.h"
-#include "Input.cpp"
+
 
 enum {
 	GLEW_Failed,

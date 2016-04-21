@@ -9,11 +9,6 @@
 #include <SOIL\SOIL.h>
 //#include "MathLib.h"
 #include "Camera.h"
-//#include "Heightmap.h"
-//#include "GameObject.h"
-//#include "Geometry.h"
-//#include "Model.h"
-//#include "Window.h"
 
 #define WINDOW_WIDTH	800
 #define WINDOW_HEIGHT	600

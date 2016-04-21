@@ -1,7 +1,6 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include <glew.h>
 #include "Window.h"
 #include "Camera.h"
 #include "GameObject.h"

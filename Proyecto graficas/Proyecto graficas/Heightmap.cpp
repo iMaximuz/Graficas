@@ -9,9 +9,6 @@ void Heightmap::Draw( Shader shader )
 
 void Heightmap::GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSize, GLfloat worldSize, GLfloat maxHeight )
 {
-
-	
-
 	this->maxHeight = maxHeight;
 
 	GLuint vertexCount = gridSize + 1;
@@ -27,7 +24,6 @@ void Heightmap::GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSi
 	glm::vec3* normals = new glm::vec3[gridSize * gridSize * 2];
 	//normals.reserve( gridSize * gridSize * 2 );
 
-	int adsasd = 0;
 	for ( int z = 0; z < vertexCount; z++ ) {
 		for ( int x = 0; x < vertexCount; x++ ) {
 
@@ -71,7 +67,7 @@ void Heightmap::GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSi
 		}
 	}
 
-	int asdasddasasd = 0;
+	
 	for ( GLuint z = 0; z < gridSize - 1; z++ )
 	{
 		for ( GLuint x = 0; x < gridSize - 1; x++ ) {
@@ -101,4 +97,3 @@ void Heightmap::LoadTerrain(const GLchar* path, GLfloat maxHeight) {
 	int width, height;
 	//unsigned char* image = SOIL_load_image( "Textures//container.jpg", &width, &height, 0, SOIL_LOAD_RGB );
 }
-
