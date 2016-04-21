@@ -101,3 +101,4 @@ void Heightmap::LoadTerrain(const GLchar* path, GLfloat maxHeight) {
 	int width, height;
 	//unsigned char* image = SOIL_load_image( "Textures//container.jpg", &width, &height, 0, SOIL_LOAD_RGB );
 }
+
