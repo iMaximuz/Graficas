@@ -60,8 +60,6 @@ void Mesh::setupMesh() {
 
 void Mesh::Draw( Shader shader ) {
 
-
-
 	GLuint diffuseNr = 1;
 	GLuint specularNr = 1;
 	for ( GLuint i = 0; i < this->textures.size(); i++ )
