@@ -6,7 +6,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.db
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -212,3 +211,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 /Proyecto graficas/Proyecto graficas.VC.VC.opendb
+/Proyecto graficas/Proyecto graficas.VC.db
