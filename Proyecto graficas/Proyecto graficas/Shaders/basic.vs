@@ -13,6 +13,7 @@ uniform mat4 projection;
 
 void main(){
     //vertexColor = color;
+    //Comentario agregado desde Visual Code
     TexCoord = vec2(texCoord.x, 1.0f - texCoord.y);;
     
     gl_Position = projection * view * model * vec4(position, 1.0);
