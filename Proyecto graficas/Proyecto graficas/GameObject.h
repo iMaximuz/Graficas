@@ -13,7 +13,6 @@ class GameObject {
 
 	std::vector<GameObject*> children;
 
-
 public:
 	
 	~GameObject();
