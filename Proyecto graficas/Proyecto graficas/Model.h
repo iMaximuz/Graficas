@@ -39,7 +39,7 @@ public:
 	// Draws the model, and thus all its meshes
 	void Draw( Shader shader )
 	{
-		glUniformMatrix4fv( glGetUniformLocation( shader.program, "localSpace" ), 1, GL_FALSE, glm::value_ptr( localSpace ) );
+		glUniformMatrix4fv( glGetUniformLocation( shader.program, "localSpace" ), 1, GL_FALSE, glm::value_ptr( this->transform.GetWorldMatrix() ) );
 		for ( GLuint i = 0; i < this->meshes.size(); i++ )
 			this->meshes[i].Draw( shader );
 	}

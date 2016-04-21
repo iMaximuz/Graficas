@@ -47,11 +47,10 @@ void CoreEngine::Run()
 			glfwPollEvents();
 
 			game->Input( g_Input, deltaTime );
-			game->RootInput(g_Input, deltaTime );
+
 			game->Update( deltaTime );
-			game->RootUpdate( deltaTime );
+			
 			game->Render();
-			game->RootRender();
 
 			glfwSwapBuffers( window->glfwWindow );
 		}

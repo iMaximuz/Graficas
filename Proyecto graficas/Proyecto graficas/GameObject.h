@@ -8,9 +8,10 @@
 #include "Transform.h"
 #include "Input.h"
 
+
 class GameObject {
 
-	std::vector< GameObject*> children;
+	std::vector<GameObject*> children;
 
 
 public:
@@ -23,9 +24,10 @@ public:
 	void UpdateChildren( GLfloat dt );
 	void RenderChildren( );
 
-	virtual void Input( InputInfo input, GLfloat dt ) = 0;
-	virtual void Update( GLfloat dt ) = 0;
-	virtual void Render() = 0;
+
+	virtual void Input( InputInfo input, GLfloat dt ) {};
+	virtual void Update( GLfloat dt ) {};
+	virtual void Render() {};
 
 	void AddChild( GameObject* child );
 

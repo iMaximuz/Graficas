@@ -3,6 +3,7 @@
 
 #include <glew.h>
 #include "Window.h"
+#include "Camera.h"
 #include "GameObject.h"
 #include "Input.h"
 
@@ -10,13 +11,16 @@ class Game {
 
 	GameObject root;
 	Window* window;
+	
 
 public:
 
+
+	inline void RootInput( InputInfo input, GLfloat dt ) { root.InputChildren( input, dt ); }
+	inline void RootUpdate( GLfloat dt ) { root.UpdateChildren( dt ); }
+	inline void RootRender() { root.RenderChildren(); }
+
 	virtual void Init() = 0;
-	inline void RootInput( InputInfo input, GLfloat dt ) { root.Input(input, dt ); }
-	inline void RootUpdate( GLfloat dt ) { root.Update( dt ); }
-	inline void RootRender() { root.Render(); }
 	virtual void Input( InputInfo input, GLfloat dt) = 0;
 	virtual void Update(GLfloat dt) = 0;
 	virtual void Render() = 0;

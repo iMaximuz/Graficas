@@ -5,6 +5,11 @@
 #include "Input.h"
 
 class SpaceGame : public Game{
+
+	Camera mainCamera;
+
+
+
 public:
 	SpaceGame ();
 	~SpaceGame ();
