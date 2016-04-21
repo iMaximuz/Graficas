@@ -33,9 +33,6 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
-    <ClInclude Include="GameComponent.h">
-      <Filter>Header Files\CoreEngine</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Header Files\CoreEngine</Filter>
     </ClInclude>
@@ -66,9 +63,6 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\RenderEngine</Filter>
     </ClInclude>
-    <ClInclude Include="RenderEngine.h">
-      <Filter>Header Files\RenderEngine</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Header Files\RenderEngine</Filter>
     </ClInclude>
@@ -78,9 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreEngine.cpp">
-      <Filter>Source Files\CoreEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="GameComponent.cpp">
       <Filter>Source Files\CoreEngine</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
