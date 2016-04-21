@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <memory>
-#include "GameComponent.h"
 #include "MathLib.h"
 #include "Shader.h"
 #include "Transform.h"
@@ -12,7 +11,6 @@
 class GameObject {
 
 	std::vector< GameObject*> children;
-	std::vector<GameComponent*> components;
 
 
 public:
@@ -21,12 +19,15 @@ public:
 
 	Transform transform;
 
-	void Input(InputInfo input, GLfloat dt );
-	void Update( GLfloat dt );
-	void Render( );
+	void InputChildren(InputInfo input, GLfloat dt );
+	void UpdateChildren( GLfloat dt );
+	void RenderChildren( );
+
+	virtual void Input( InputInfo input, GLfloat dt ) = 0;
+	virtual void Update( GLfloat dt ) = 0;
+	virtual void Render() = 0;
 
 	void AddChild( GameObject* child );
-	void AddComponent( GameComponent* component );
 
 };
 
