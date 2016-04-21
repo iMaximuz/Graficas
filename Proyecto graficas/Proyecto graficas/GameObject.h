@@ -11,7 +11,7 @@
 
 class GameObject {
 
-	std::vector< GameObject*> children;
+	std::vector<GameObject*> children;
 	std::vector<GameComponent*> components;
 
 
