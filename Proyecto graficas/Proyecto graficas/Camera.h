@@ -1,6 +1,7 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
+#include "Precompiled.h"
 #include "MathLib.h"
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods

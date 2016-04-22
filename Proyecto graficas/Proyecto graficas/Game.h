@@ -1,9 +1,9 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include "Window.h"
-#include "Camera.h"
+#include "Precompiled.h"
 #include "GameObject.h"
+#include "Window.h"
 #include "Input.h"
 
 class Game {

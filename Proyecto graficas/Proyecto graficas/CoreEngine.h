@@ -1,6 +1,10 @@
 #ifndef _COREENGINE_H_
 #define _COREENGINE_H_
 
+#include "Precompiled.h"
+
+class Window;
+class Game;
 
 enum {
 	GLEW_Failed,
@@ -9,7 +13,6 @@ enum {
 };
 
 class CoreEngine {
-
 
 	Window* window;
 	Game* game;

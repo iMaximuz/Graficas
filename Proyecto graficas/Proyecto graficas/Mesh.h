@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <glew.h>
+//#include <glew.h>
 #include <vector>
 #include "MathLib.h"
 

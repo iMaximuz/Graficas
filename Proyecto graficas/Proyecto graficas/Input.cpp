@@ -1,18 +1,6 @@
 #pragma once
+#include "Precompiled.h"
 #include "Input.h"
-//#include <glew.h>
-//#include <glfw3.h>
-
-//static struct Input {
-//	GLboolean keys[1024];
-//	GLboolean leftMouse;
-//	GLboolean rightMouse;
-//	GLdouble mousePosX;
-//	GLdouble mousePosY;
-//	GLdouble scrollAxis;
-//} input;
-
-
 
 inline void Key_Callback( GLFWwindow* window, int key, int scancode, int action, int mode ) {
 

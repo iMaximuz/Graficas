@@ -1,10 +1,9 @@
 #ifndef _GEOMETRY_H_
 #define _GEOMETRY_H_
 
-#include "GameObject.h" 
-#include "MathLib.h"
-#include "Shader.h"
+#include "Precompiled.h"
 #include "Mesh.h"
+#include "GameObject.h"
 
 class Sphere : public GameObject{
 

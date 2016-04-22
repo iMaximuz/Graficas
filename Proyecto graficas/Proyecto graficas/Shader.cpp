@@ -73,7 +73,7 @@ Shader::Shader( const char* vertexPath, const char* fragmentPath ) {
 
 }
 
-void Shader::SetUniformf(const GLchar* uniformName, int uniformSize, GLfloat* value) {
+void Shader::SetUniformf(const GLchar* uniformName, int uniformSize, float* value) {
 
 	GLint uniformLocation = glGetUniformLocation( this->program, uniformName );
 	if ( uniformLocation < 0 ) {

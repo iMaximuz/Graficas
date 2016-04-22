@@ -11,7 +11,7 @@
 using namespace std;
 // GL Includes
 
-#include <glew.h>
+//#include <glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <SOIL/SOIL.h>

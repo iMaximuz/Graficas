@@ -1,8 +1,7 @@
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
-#include <glfw3.h>
-#include <iostream>
+#include "Precompiled.h"
 
 enum {
 	Window_Success,

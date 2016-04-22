@@ -1,7 +1,7 @@
 #ifndef _HEIGHTMAP_H_
 #define _HEIGHTMAP_H_
-#include <stdlib.h>
-#include <array>
+
+
 #include "GameObject.h"
 #include "Mesh.h"
 

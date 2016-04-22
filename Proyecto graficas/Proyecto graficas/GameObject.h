@@ -1,10 +1,7 @@
 #ifndef _GAMEOBJECT_H_
 #define _GAMEOBJECT_H_
 
-#include <vector>
-#include <memory>
-#include "MathLib.h"
-#include "Shader.h"
+#include "Precompiled.h"
 #include "Transform.h"
 #include "Input.h"
 

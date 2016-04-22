@@ -2,7 +2,6 @@
 #define _SPACEGAME_H_
 
 #include "Game.h"
-#include "Input.h"
 
 class SpaceGame : public Game{
 
