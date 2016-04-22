@@ -1,6 +1,4 @@
 #include "CoreEngine.h"
-#include "Game.h"
-#include "Window.h"
 #include "Input.cpp"
 
 CoreEngine::CoreEngine( Game * _game, Window * _window ) : game(_game), window(_window)

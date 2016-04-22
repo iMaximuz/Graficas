@@ -1,5 +1,7 @@
 #include "SpaceGame.h"
 
+#include "Heightmap.h"
+
 SpaceGame::SpaceGame(){
 
 }

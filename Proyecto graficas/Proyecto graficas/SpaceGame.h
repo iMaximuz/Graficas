@@ -2,12 +2,11 @@
 #define _SPACEGAME_H_
 
 #include "Game.h"
+#include "Camera.h"
 
 class SpaceGame : public Game{
 
 	Camera mainCamera;
-
-
 
 public:
 	SpaceGame ();

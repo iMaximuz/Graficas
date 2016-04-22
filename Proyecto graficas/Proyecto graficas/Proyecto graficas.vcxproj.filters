@@ -63,9 +63,6 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\RenderEngine</Filter>
     </ClInclude>
-    <ClInclude Include="RenderEngine.h">
-      <Filter>Header Files\RenderEngine</Filter>
-    </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Header Files\RenderEngine</Filter>
     </ClInclude>

@@ -3,8 +3,8 @@
 
 #include "Precompiled.h"
 
-class Window;
-class Game;
+#include "Window.h"
+#include "Game.h"
 
 enum {
 	GLEW_Failed,
