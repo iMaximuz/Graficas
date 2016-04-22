@@ -1,6 +1,10 @@
 #ifndef _PRECOMPILED_H_
 #define _PRECOMPILED_H_
 
+#define WINDOW_WIDTH	800
+#define WINDOW_HEIGHT	600
+
+
 #include <iostream>
 #include <string>
 #include <vector>

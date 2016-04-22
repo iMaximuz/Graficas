@@ -6,6 +6,8 @@ struct InputInfo {
 	GLboolean rightMouse;
 	GLdouble mousePosX;
 	GLdouble mousePosY;
+	GLdouble mouseDeltaX;
+	GLdouble mouseDeltaY;
 	GLdouble scrollAxis;
 };
 

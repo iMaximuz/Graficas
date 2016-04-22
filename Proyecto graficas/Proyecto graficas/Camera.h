@@ -34,7 +34,7 @@ class Camera {
 	GLfloat MovementSpeed;
 	GLfloat MouseSensitivity;
 
-
+	glm::mat4 projection;
 	void UpdateVectors();
 
 public:
@@ -46,6 +46,17 @@ public:
 
 
 	// Constructor with vectors
+
+	Camera( GLfloat fov, GLfloat aspect, GLfloat near, GLfloat far, glm::vec3 position = glm::vec3( 0.0f, 0.0f, 0.0f ) ) : WorldUp( glm::vec3( 0.0f, 1.0f, 0.0f ) ), Yaw( YAW ),
+		Pitch( PITCH ), Front( glm::vec3( 0.0f, 0.0f, -1.0f ) ), MovementSpeed( SPEED ), MouseSensitivity( SENSITIVTY ), ZoomAmount( ZOOM ) {
+
+		this->Position = position;
+
+		projection = glm::perspective( fov, aspect, near, far );
+
+		this->UpdateVectors();
+	}
+
 	Camera( glm::vec3 position = glm::vec3( 0.0f, 0.0f, 0.0f ), glm::vec3 up = glm::vec3( 0.0f, 1.0f, 0.0f ), GLfloat yaw = YAW, 
 		GLfloat pitch = PITCH ) : Front( glm::vec3( 0.0f, 0.0f, -1.0f ) ), MovementSpeed( SPEED ), MouseSensitivity( SENSITIVTY ), ZoomAmount( ZOOM )
 	{
@@ -54,6 +65,9 @@ public:
 		this->Yaw = yaw;
 		this->Pitch = pitch;
 		this->UpdateVectors();
+
+		projection = glm::perspective( 90.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f );
+
 	}
 	// Constructor with scalar values
 	Camera( GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch ) : Front( glm::vec3( 0.0f, 0.0f, -1.0f ) ), 
@@ -64,9 +78,14 @@ public:
 		this->Yaw = yaw;
 		this->Pitch = pitch;
 		this->UpdateVectors();
+
+		projection = glm::perspective( 90.0f, (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f );
 	}
 
 	glm::mat4 GetViewMatrix();
+	inline glm::mat4 GetProjectionMatrix() {
+		return projection;
+	}
 
 	void Rotate(GLfloat xoffset, GLfloat yoffset, GLboolean maxedPitch = true);
 

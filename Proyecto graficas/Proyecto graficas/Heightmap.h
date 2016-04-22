@@ -132,7 +132,7 @@ public:
 
 	}
 
-	void Draw( Shader shader );
+	void Render( Shader shader, Camera* cam);
 
 	void GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSize, GLfloat worldSize, GLfloat maxHeight );
 
@@ -140,7 +140,7 @@ public:
 
 
 	inline glm::vec2 GetWorldSize() {
-		return glm::vec2(this->worldSizeX, this->worldSizeZ);
+		return glm::vec2( this->worldSizeX, this->worldSizeZ );
 	}
 
 };

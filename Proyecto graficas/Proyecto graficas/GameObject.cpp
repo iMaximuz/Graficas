@@ -23,16 +23,16 @@ void GameObject::UpdateChildren( GLfloat dt )
 	for ( int i = 0; i < children.size(); i++ )
 		children[i]->Update( dt );
 
-	Update(dt);
+	Update( dt );
 
 }
 
-void GameObject::RenderChildren( )
+void GameObject::RenderChildren( Shader shader, Camera* cam)
 {
 	for ( int i = 0; i < children.size(); i++ )
-		children[i]->Render( );
+		children[i]->RenderChildren( shader, cam);
 
-	Render();
+	Render( shader, cam);
 
 }
 

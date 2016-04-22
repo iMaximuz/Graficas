@@ -1,8 +1,19 @@
 #include "Heightmap.h"
 
-void Heightmap::Draw( Shader shader )
+void Heightmap::Render( Shader shader, Camera* cam )
 {
-//	glUniformMatrix4fv( glGetUniformLocation( shader.program, "localSpace" ), 1, GL_FALSE, glm::value_ptr( localSpace ) );
+
+	/*
+	uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+	*/
+
+	
+
+	glUniformMatrix4fv( glGetUniformLocation( shader.program, "projection" ), 1, GL_FALSE, glm::value_ptr( cam->GetProjectionMatrix() ) );
+	glUniformMatrix4fv( glGetUniformLocation( shader.program, "view" ), 1, GL_FALSE, glm::value_ptr( cam->GetViewMatrix() ) );
+	glUniformMatrix4fv( glGetUniformLocation( shader.program, "model" ), 1, GL_FALSE, glm::value_ptr( this->transform.GetWorldMatrix() ) );
 	mesh.Draw( shader );
 }
 

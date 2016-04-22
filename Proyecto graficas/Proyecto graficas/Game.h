@@ -2,6 +2,7 @@
 #define _GAME_H_
 
 #include "Precompiled.h"
+#include "Camera.h"
 #include "GameObject.h"
 #include "Window.h"
 #include "Input.h"
@@ -10,14 +11,17 @@ class Game {
 
 	GameObject root;
 	Window* window;
-	
+
+protected:
+
+	Camera* mainCamera;
 
 public:
 
 
 	inline void RootInput( InputInfo input, GLfloat dt ) { root.InputChildren( input, dt ); }
 	inline void RootUpdate( GLfloat dt ) { root.UpdateChildren( dt ); }
-	inline void RootRender() { root.RenderChildren(); }
+	inline void RootRender( Shader shader ) { root.RenderChildren( shader, mainCamera ); }
 
 	virtual void Init() = 0;
 	virtual void Input( InputInfo input, GLfloat dt) = 0;

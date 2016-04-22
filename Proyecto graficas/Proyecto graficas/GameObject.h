@@ -2,6 +2,8 @@
 #define _GAMEOBJECT_H_
 
 #include "Precompiled.h"
+#include "Shader.h"
+#include "Camera.h"
 #include "Transform.h"
 #include "Input.h"
 
@@ -18,12 +20,12 @@ public:
 
 	void InputChildren(InputInfo input, GLfloat dt );
 	void UpdateChildren( GLfloat dt );
-	void RenderChildren( );
+	void RenderChildren( Shader shader, Camera* cam );
 
 
-	virtual void Input( InputInfo input, GLfloat dt ) {};
-	virtual void Update( GLfloat dt ) {};
-	virtual void Render() {};
+	virtual void Input( InputInfo input, GLfloat dt ) { };
+	virtual void Update( GLfloat dt ) { };
+	virtual void Render( Shader shader, Camera* cam ) { };
 
 	void AddChild( GameObject* child );
 
