@@ -132,7 +132,7 @@ public:
 
 	}
 
-	void Render( Shader shader, Camera* cam);
+	void Render( Shader shader );
 
 	void GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSize, GLfloat worldSize, GLfloat maxHeight );
 

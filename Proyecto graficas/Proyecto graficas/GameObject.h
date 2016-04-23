@@ -20,12 +20,12 @@ public:
 
 	void InputChildren(InputInfo input, GLfloat dt );
 	void UpdateChildren( GLfloat dt );
-	void RenderChildren( Shader shader, Camera* cam );
+	void RenderChildren( Shader shader );
 
 
 	virtual void Input( InputInfo input, GLfloat dt ) { };
 	virtual void Update( GLfloat dt ) { };
-	virtual void Render( Shader shader, Camera* cam ) { };
+	virtual void Render( Shader shader ) { };
 
 	void AddChild( GameObject* child );
 

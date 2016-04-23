@@ -9,6 +9,12 @@ struct InputInfo {
 	GLdouble mouseDeltaX;
 	GLdouble mouseDeltaY;
 	GLdouble scrollAxis;
+
+	inline void Reset() {
+		mouseDeltaX = 0.0f;
+		mouseDeltaY = 0.0f;
+	}
+
 };
 
 static InputInfo g_Input;

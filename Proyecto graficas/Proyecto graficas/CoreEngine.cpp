@@ -51,6 +51,8 @@ void CoreEngine::Run()
 			
 			game->Render();
 
+			g_Input.Reset();
+
 			glfwSwapBuffers( window->glfwWindow );
 		}
 	}

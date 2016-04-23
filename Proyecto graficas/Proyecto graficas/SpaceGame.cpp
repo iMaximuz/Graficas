@@ -53,7 +53,7 @@ void SpaceGame::Input( InputInfo input, GLfloat dt){
 		this->LockMouse( false );
 	}
 
-	RootInput( g_Input, dt );
+	RootInput( input, dt );
 }
 
 void SpaceGame::Update( GLfloat dt ){
@@ -69,5 +69,10 @@ void SpaceGame::Render(){
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 	basicShader->Use();
+
+	glUniformMatrix4fv( glGetUniformLocation( basicShader->program, "projection" ), 1, GL_FALSE, glm::value_ptr( mainCamera->GetProjectionMatrix() ) );
+	glUniformMatrix4fv( glGetUniformLocation( basicShader->program, "view" ), 1, GL_FALSE, glm::value_ptr( mainCamera->GetViewMatrix() ) );
+
+
 	RootRender( *basicShader );
 }

@@ -21,7 +21,7 @@ public:
 
 	inline void RootInput( InputInfo input, GLfloat dt ) { root.InputChildren( input, dt ); }
 	inline void RootUpdate( GLfloat dt ) { root.UpdateChildren( dt ); }
-	inline void RootRender( Shader shader ) { root.RenderChildren( shader, mainCamera ); }
+	inline void RootRender( Shader shader ) { root.RenderChildren( shader ); }
 
 	virtual void Init() = 0;
 	virtual void Input( InputInfo input, GLfloat dt) = 0;
