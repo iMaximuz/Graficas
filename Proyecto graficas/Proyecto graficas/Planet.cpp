@@ -17,7 +17,7 @@ void Planet::GeneratePlanet( GLuint seed, GLuint noiseSize ){
 
 	NoiseMap noiseMap( seed, noiseSize, vertexCount, vertexCount );
 	//TODO: Calcular normales por cara
-	//glm::vec3* normals = new glm::vec3[(slices + 1) * (stacks + 1)];
+	glm::vec3* normals = new glm::vec3[(slices + 1) * (stacks + 1) * 2];
 
 	GLfloat nPoleAverage = 0;
 	GLfloat sPoleAverage = 0;
@@ -82,15 +82,15 @@ void Planet::GeneratePlanet( GLuint seed, GLuint noiseSize ){
 
 
 			GLuint start = z * vertexCount + x;
-			//glm::vec3 v1 = (mesh.vertices[start + vertexCount].position - mesh.vertices[start].position);
-			//glm::vec3 v2 = (mesh.vertices[start + 1].position - mesh.vertices[start].position);
-			////normals.push_back( glm::normalize( glm::cross( v1, v2 ) ) );
-			////normals[index++] = glm::normalize( glm::cross( v1, v2 ) );
+			glm::vec3 v1 = (mesh.vertices[start + vertexCount].position - mesh.vertices[start].position);
+			glm::vec3 v2 = (mesh.vertices[start + 1].position - mesh.vertices[start].position);
+			//normals.push_back( glm::normalize( glm::cross( v1, v2 ) ) );
+			normals[index++] = glm::normalize( glm::cross( v1, v2 ) );
 
-			//v1 = (mesh.vertices[start + vertexCount].position - mesh.vertices[start + vertexCount + 1].position);
-			//v2 = (mesh.vertices[start + 1].position - mesh.vertices[start + vertexCount + 1].position);
-			////normals.push_back( glm::normalize( glm::cross( v2, v1 ) ) );
-			////normals[index++] = glm::normalize( glm::cross( v2, v1 ) );
+			v1 = (mesh.vertices[start + vertexCount].position - mesh.vertices[start + vertexCount + 1].position);
+			v2 = (mesh.vertices[start + 1].position - mesh.vertices[start + vertexCount + 1].position);
+			//normals.push_back( glm::normalize( glm::cross( v2, v1 ) ) );
+			normals[index++] = glm::normalize( glm::cross( v2, v1 ) );
 
 
 			//mesh.vertices[vertexIndex].normal = normalAverage;
@@ -107,28 +107,28 @@ void Planet::GeneratePlanet( GLuint seed, GLuint noiseSize ){
 		}
 	}
 
-	//for ( GLuint z = 0; z < slices - 1; z++ )
-	//{
-	//	for ( GLuint x = 0; x < stacks - 1; x++ ) {
+	for ( GLuint z = 0; z < slices; z++ )
+	{
+		for ( GLuint x = 0; x < stacks; x++ ) {
 
-	//		GLuint start = z * gridSize + x;
-	//		glm::vec3 normalAverage;
-	//		normalAverage += normals[start + 1];
-	//		normalAverage += normals[start + 2];
-	//		normalAverage += normals[start + 3];
-	//		normalAverage += normals[start + gridSize];
-	//		normalAverage += normals[start + gridSize + 1];
-	//		normalAverage += normals[start + gridSize + 2];
+			GLuint start = z * stacks + x;
+			glm::vec3 normalAverage;
+			normalAverage += normals[start + 1];
+			normalAverage += normals[start + 2];
+			normalAverage += normals[start + 3];
+			normalAverage += normals[start + (int)stacks];
+			normalAverage += normals[start + (int)stacks + 1];
+			normalAverage += normals[start + (int)stacks + 2];
 
-	//		glm::normalize( normalAverage );
+			glm::normalize( normalAverage );
 
-	//		GLuint vertexIndex = (z + 1) * vertexCount + (x + 1);
-	//		mesh.vertices[vertexIndex].normal = normalAverage;
-	//	}
-	//}
+			GLuint vertexIndex = (z + 1) * (vertexCount) + (x + 1);
+			mesh.vertices[vertexIndex].normal = normalAverage;
+		}
+	}
 
 
-	//delete normals;
+	delete normals;
 
 	mesh.setupMesh();
 }

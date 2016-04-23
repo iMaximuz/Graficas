@@ -1,6 +1,8 @@
 #ifndef _MODEL_H_
 #define _MODEL_H_
 
+#include "Precompiled.h"
+
 // Std. Includes
 #include <string>
 #include <fstream>

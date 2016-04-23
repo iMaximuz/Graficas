@@ -3,11 +3,16 @@
 #include "Heightmap.h"
 #include "Geometry.h"
 #include "Planet.h"
+//#include "Model.h"
 
-#define MAX_PLANETS			5
+#define MAX_PLANETS			500
 
 Shader* basicShader;
 Planet *planets;
+Sphere *sphere;
+Sphere *Skydome;
+
+
 
 SpaceGame::SpaceGame() {
 
@@ -21,6 +26,7 @@ SpaceGame::~SpaceGame(){
 
 }
 
+
 void SpaceGame::Init(){
 	
 
@@ -32,33 +38,40 @@ void SpaceGame::Init(){
 	basicShader = new Shader( "Shaders/terrain.vert", "Shaders/terrain.frag" );
 
 	Heightmap *terreno = new Heightmap(0, 16, 32, 100, 50);
-	Sphere *sphere = new Sphere( 10, 32, 32 );
+	sphere = new Sphere( 2, 32, 32 );
 
-	//GameObject* planets = new GameObject();
-	//Planet *planet = new Planet( 10, 32, 32, 0, 128 );
-	//Planet *planet2 = new Planet( 10, 32, 32, 0, 128 );
-	//planets->AddChild( (GameObject*)planet );
-	//planets->AddChild( (GameObject*)planet2 );
 
+	//Model* nave = new Model( "Models/Arwing_001.obj" );
+
+	Planet *planet = new Planet( 1000, 32, 32, 0, 0 );
+	planet->transform.Translate( glm::vec3( 0, 0, 700 ));
+	
 	planets = new Planet[MAX_PLANETS];
 	
+	glm::vec3 maxDistance = glm::vec3( 200, 200, -200 );
+
+
+
 	for ( int i = 0; i < MAX_PLANETS; i++ ) {
 
-		GLfloat randX = rand() % 500 - 250;
-		GLfloat randY = rand() % 200 - 100;
-		GLfloat randZ = rand() % 500 - 250;
 		
-		GLfloat randRad = rand() % 70 + 50;
 
-		planets[i].GenerateNewPlanet( randRad, 32, 32, rand(), 32 );
+		GLfloat randX = rand() % (int)maxDistance.x - 100;
+		GLfloat randY = rand() % (int)maxDistance.y - 100;
+		GLfloat randZ = rand() % (int)maxDistance.z - 100;
+		
+		GLfloat randRad = rand() % 9 + 1;
+
+		planets[i].GenerateNewPlanet( randRad, 8, 8, rand(),  16);
 		planets[i].transform.Translate( glm::vec3( randX, randY, randZ ) );
 
 	}
 
 	terreno->transform.Translate(glm::vec3(-terreno->GetWorldSize().x * 0.5f, 0.0f, -terreno->GetWorldSize().y * 0.5f));
 
-	//AddObject( sphere );
-	//AddObject( (GameObject*)planet );
+	AddObject( sphere );
+	AddObject( planet );
+	//AddObject( nave );
 	//AddObject( terreno );
 }
 
@@ -94,6 +107,15 @@ void SpaceGame::Input( InputInfo input, GLfloat dt){
 
 void SpaceGame::Update( GLfloat dt ){
 
+
+	for ( int i = 0; i < MAX_PLANETS; i++ ) {
+
+
+		planets[i].transform.Rotate( dt / (rand() % 4 + 1), glm::vec3( 1.0f, 1.0f, 1.0f ) );
+
+	}
+
+
 	RootUpdate( dt );
 }
 
@@ -102,12 +124,15 @@ void SpaceGame::Render(){
 	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	glm::vec3 lightPosition = glm::vec3( 0, 10.0f, 0 );
-	//glm::vec3 lightPosition = glm::vec3( std::sin( PI/16 * glfwGetTime() * 2) * 32.0f, 15.0f, std::cos( PI / 16 * glfwGetTime() * 2 ) * 32.0f );
+	//glm::vec3 lightPosition = glm::vec3( 0, 10.0f, 0 );
+	glm::vec3 lightPosition = glm::vec3( std::sin( PI/16 * glfwGetTime() * 2) * 32.0f, 15.0f, std::cos( PI / 16 * glfwGetTime() * 2 ) * 32.0f );
+	sphere->transform.worldMatrix = glm::mat4();
+	sphere->transform.Translate( lightPosition );
+
 	glm::vec3 lightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
 	glm::vec3 objectColor = glm::vec3( 0.6f, 0.6f, 0.6f );
 
-	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 	basicShader->Use();
 
