@@ -25,6 +25,12 @@
     <Filter Include="Source Files\RenderEngine">
       <UniqueIdentifier>{6e591b59-7b6a-4c39-89fa-2c73fa36261e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{fc44b1d9-54ec-491e-a1c0-b74829b0f838}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{6ab4d7ac-3b6b-4ade-b033-6c7d148debc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoreEngine.h">
@@ -66,11 +72,17 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files\RenderEngine</Filter>
     </ClInclude>
+    <ClInclude Include="NoiseMap.h">
+      <Filter>Header Files\RenderEngine</Filter>
+    </ClInclude>
     <ClInclude Include="SpaceGame.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Precompiled.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\CoreEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Planet.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +120,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SpaceGame.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Planet.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

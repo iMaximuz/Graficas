@@ -1,6 +1,9 @@
 #ifndef _GAMEOBJECT_H_
 #define _GAMEOBJECT_H_
 
+
+//#include <memory>
+
 #include "Precompiled.h"
 #include "Shader.h"
 #include "Camera.h"

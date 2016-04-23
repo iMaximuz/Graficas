@@ -1,32 +1,40 @@
-#include "Geometry.h"
+#include "Planet.h"
+#include "NoiseMap.h"
 
-//TODO: Quitar el radio de la esfera, la esfera debe ser unitaria.
-Sphere::Sphere( GLfloat rad, GLfloat slices, GLfloat stacks )
-{
-	this->rad = rad;
+Planet::Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
+	this->maxRad = maxRad;
 	this->slices = slices;
 	this->stacks = stacks;
-	GenerateSphere();
+
+
+	GeneratePlanet(seed, noiseSize);
 }
 
-void Sphere::GenerateSphere()
-{
+
+
+void Planet::GeneratePlanet( GLuint seed, GLuint noiseSize ){
 	GLint vertexCount = stacks + 1;
 
-
+	NoiseMap noiseMap( seed, noiseSize, vertexCount, vertexCount );
 	//TODO: Calcular normales por cara
 	//glm::vec3* normals = new glm::vec3[(slices + 1) * (stacks + 1)];
+
+	GLfloat nPoleAverage = 0;
+	GLfloat sPoleAverage = 0;
 
 	for ( int z = 0; z < slices + 1; z++ ) {
 		for ( int x = 0; x < stacks + 1; x++ ) {
 
 			Vertex vert;
 
-			GLfloat theta = z*PI *2 / slices;
+			GLfloat theta = z*PI * 2 / slices;
 			GLfloat phi = x*PI / stacks;
 
 
 			//TODO: Acomodar el orden correcto
+
+			GLfloat rad = (noiseMap.noiseData[z * vertexCount + x] * maxRad);
+
 			vert.position.x = rad * cosf( theta )* sinf( phi );
 			vert.position.y = rad * cosf( phi );
 			vert.position.z = rad * sinf( theta )* sinf( phi );
@@ -36,14 +44,41 @@ void Sphere::GenerateSphere()
 
 			mesh.vertices.push_back( vert );
 
+
+			if ( x == 0 )
+				nPoleAverage += vert.position.y;
+			else if ( x % (int)(stacks) == 0)
+				sPoleAverage += vert.position.y;
+		
+		}
+	}
+
+	nPoleAverage /= vertexCount;
+	sPoleAverage /= vertexCount;
+
+	for ( int z = 0; z < slices + 1; z++ ) {
+		for ( int x = 0; x < stacks + 1; x++ ) {
+			if ( x == 0 )
+				mesh.vertices[z * vertexCount + x].position.y = nPoleAverage;
+			else if ( x % (int)(stacks) == 0 )
+				mesh.vertices[z * vertexCount + x].position.y = sPoleAverage;
+			
+			if ( z == 0 ) {
+				glm::vec3 average = mesh.vertices[(z)* vertexCount + x].position + mesh.vertices[(z + slices) * vertexCount + x].position ;
+				average *= 0.5f;
+
+				mesh.vertices[(z) * vertexCount + x].position = average;
+				mesh.vertices[(z + slices) * vertexCount + x].position = average;
+			}
+
 		}
 	}
 
 	int index = 0;
 
-	
-	for ( int z = 0; z < slices ; z++ ) {
-		for ( int x = 0; x < stacks ; x++ ) {
+
+	for ( int z = 0; z < slices; z++ ) {
+		for ( int x = 0; x < stacks; x++ ) {
 
 
 			GLuint start = z * vertexCount + x;
@@ -96,12 +131,16 @@ void Sphere::GenerateSphere()
 	//delete normals;
 
 	mesh.setupMesh();
-
 }
 
+void Planet::GenerateNewPlanet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
+	this->maxRad = maxRad;
+	this->slices = slices;
+	this->stacks = stacks;
+	GeneratePlanet( seed, noiseSize );
+}
 
-void Sphere::Render( Shader shader )
-{
+void Planet::Render( Shader shader ){
 	glUniformMatrix4fv( glGetUniformLocation( shader.program, "model" ), 1, GL_FALSE, glm::value_ptr( this->transform.GetWorldMatrix() ) );
 	mesh.Draw( shader );
 }

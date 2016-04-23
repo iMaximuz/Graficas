@@ -20,6 +20,8 @@ CoreEngine::CoreEngine( Game * _game, Window * _window ) : game(_game), window(_
 
 	game->SetWindow( this->window );
 
+	srand( glfwGetTime() );
+
 }
 
 CoreEngine::~CoreEngine()

@@ -19,7 +19,7 @@ public:
 
 	Sphere( GLfloat rad, GLfloat slices, GLfloat stacks );
 
-	void Draw( Shader shader );
+	void Render( Shader shader );
 
 
 };

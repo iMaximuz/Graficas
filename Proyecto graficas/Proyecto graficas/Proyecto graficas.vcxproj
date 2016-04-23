@@ -162,6 +162,8 @@
     <ClInclude Include="MathLib.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="NoiseMap.h" />
+    <ClInclude Include="Planet.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpaceGame.h" />
@@ -176,6 +178,7 @@
     <ClCompile Include="Heightmap.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SpaceGame.cpp" />

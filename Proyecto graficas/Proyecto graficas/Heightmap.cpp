@@ -1,4 +1,5 @@
 #include "Heightmap.h"
+#include "NoiseMap.h"
 
 void Heightmap::Render( Shader shader )
 {
