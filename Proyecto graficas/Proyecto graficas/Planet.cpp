@@ -1,5 +1,9 @@
 #include "Planet.h"
 #include "NoiseMap.h"
+#include "Heightmap.h"
+#include <SOIL\SOIL.h>
+
+#define COLORBYTE(x) (GLfloat)x / 255.0f
 
 Planet::Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
 	this->maxRad = maxRad;
@@ -10,7 +14,141 @@ Planet::Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0,
 	GeneratePlanet(seed, noiseSize);
 }
 
+Planet::Planet( const GLchar* filePath, GLfloat maxRad ) {
+	this->maxRad = maxRad;
+	LoadHeightMap( filePath, maxRad );
+}
 
+void Planet::LoadHeightMap( const GLchar* filePath, GLfloat maxRad ) {
+
+	HeightmapFile hMap;
+
+	GLubyte *image;
+	image = SOIL_load_image( filePath, &hMap.sizeX, &hMap.sizeY, 0, SOIL_LOAD_RGB );
+	
+	hMap.data = new GLfloat[hMap.sizeX * hMap.sizeY * 2];
+
+	int stride = 0;
+	for ( int y = 0; y < hMap.sizeY; y++ ) {
+		for ( int x = 0; x < hMap.sizeX; x++ ) {
+			hMap.data[y * hMap.sizeX + x] = COLORBYTE(*(image + stride));
+			stride += 3;
+		}
+	}
+
+	this->stacks = hMap.sizeX;
+	this->slices = hMap.sizeY;
+	GLint vertexCount = stacks + 1;
+	
+	GLfloat theta = 0;
+	GLfloat phi = 0;
+
+	for ( int z = 0; z < slices - 1; z++ ) {
+		for ( int x = 0; x < stacks - 1; x++ ) {
+
+			Vertex vert[3];
+
+			GLfloat rad = (hMap.data[z * vertexCount + x] * maxRad);
+
+			theta = z * PI * 2 / slices;
+			phi = x * PI / stacks;
+			vert[0].position.x = rad * cosf( theta )* sinf( phi );
+			vert[0].position.y = rad * cosf( phi );
+			vert[0].position.z = rad * sinf( theta )* sinf( phi );
+			vert[0].texCoord.x = (1 / vertexCount)*x;
+			vert[0].texCoord.y = (1 / vertexCount)*z;
+			vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+
+
+			rad = (hMap.data[(z + 1) * vertexCount + x] * maxRad);
+
+			theta = (z + 1) * PI * 2 / slices;
+			phi = x * PI / stacks;
+			vert[1].position.x = rad * cosf( theta )* sinf( phi );
+			vert[1].position.y = rad * cosf( phi );
+			vert[1].position.z = rad * sinf( theta )* sinf( phi );
+			vert[1].texCoord.x = (1 / vertexCount)*x;
+			vert[1].texCoord.y = (1 / vertexCount)*z;
+			vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+
+			rad = (hMap.data[z * vertexCount + (x + 1)] * maxRad);
+
+			theta = z * PI * 2 / slices;
+			phi = (x + 1) * PI / stacks;
+			vert[2].position.x = rad * cosf( theta )* sinf( phi );
+			vert[2].position.y = rad * cosf( phi );
+			vert[2].position.z = rad * sinf( theta )* sinf( phi );
+			vert[2].texCoord.x = (1 / vertexCount)*x;
+			vert[2].texCoord.y = (1 / vertexCount)*z;
+			vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+
+			glm::vec3 v1 = vert[1].position - vert[0].position;
+			glm::vec3 v2 = vert[1].position - vert[2].position;
+
+			glm::vec3 normal = glm::cross( v2, v1 );
+
+			vert[0].normal = normal;
+			vert[1].normal = normal;
+			vert[2].normal = normal;
+
+			mesh.vertices.push_back( vert[0] );
+			mesh.vertices.push_back( vert[1] );
+			mesh.vertices.push_back( vert[2] );
+
+			rad = (hMap.data[z * vertexCount + (x + 1)] * maxRad);
+
+			theta = z * PI * 2 / slices;
+			phi = (x + 1) * PI / stacks;
+			vert[0].position.x = rad * cosf( theta )* sinf( phi );
+			vert[0].position.y = rad * cosf( phi );
+			vert[0].position.z = rad * sinf( theta )* sinf( phi );
+			vert[0].texCoord.x = (1 / vertexCount)*x;
+			vert[0].texCoord.y = (1 / vertexCount)*z;
+			vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+
+			rad = (hMap.data[(z + 1) * vertexCount + x] * maxRad);
+
+			theta = (z + 1) * PI * 2 / slices;
+			phi = x * PI / stacks;
+			vert[1].position.x = rad * cosf( theta )* sinf( phi );
+			vert[1].position.y = rad * cosf( phi );
+			vert[1].position.z = rad * sinf( theta )* sinf( phi );
+			vert[1].texCoord.x = (1 / vertexCount)*x;
+			vert[1].texCoord.y = (1 / vertexCount)*z;
+			vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+
+			rad = (hMap.data[(z + 1) * vertexCount + (x + 1)] * maxRad);
+
+			theta = (z + 1) * PI * 2 / slices;
+			phi = (x + 1) * PI / stacks;
+			vert[2].position.x = rad * cosf( theta )* sinf( phi );
+			vert[2].position.y = rad * cosf( phi );
+			vert[2].position.z = rad * sinf( theta )* sinf( phi );
+			vert[2].texCoord.x = (1 / vertexCount)*x;
+			vert[2].texCoord.y = (1 / vertexCount)*z;
+			vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+
+			v1 = vert[2].position - vert[0].position;
+			v2 = vert[2].position - vert[1].position;
+
+			normal = glm::cross( v1, v2 );
+
+			vert[0].normal = normal;
+			vert[1].normal = normal;
+			vert[2].normal = normal;
+
+			mesh.vertices.push_back( vert[0] );
+			mesh.vertices.push_back( vert[1] );
+			mesh.vertices.push_back( vert[2] );
+
+		}
+	}
+
+	delete hMap.data;
+	SOIL_free_image_data( image );
+
+	mesh.setupMesh( Mesh_Arrays );
+}
 
 void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 	GLint vertexCount = stacks + 1;
@@ -148,6 +286,8 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert[0].position.z = rad * sinf(theta)* sinf(phi);
 				vert[0].texCoord.x = (1 / vertexCount)*x;
 				vert[0].texCoord.y = (1 / vertexCount)*z;
+				vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+
 
 				rad = (noiseMap.noiseData[(z + 1) * vertexCount + x] * maxRad);
 
@@ -158,6 +298,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert[1].position.z = rad * sinf(theta)* sinf(phi);
 				vert[1].texCoord.x = (1 / vertexCount)*x;
 				vert[1].texCoord.y = (1 / vertexCount)*z;
+				vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
 
 				rad = (noiseMap.noiseData[z * vertexCount + (x + 1)] * maxRad);
 
@@ -168,6 +309,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert[2].position.z = rad * sinf(theta)* sinf(phi);
 				vert[2].texCoord.x = (1 / vertexCount)*x;
 				vert[2].texCoord.y = (1 / vertexCount)*z;
+				vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
 
 				glm::vec3 v1 = vert[1].position - vert[0].position;
 				glm::vec3 v2 = vert[1].position - vert[2].position;
@@ -177,7 +319,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert[0].normal = normal;
 				vert[1].normal = normal;
 				vert[2].normal = normal;
-
+				
 				mesh.vertices.push_back(vert[0]);
 				mesh.vertices.push_back(vert[1]);
 				mesh.vertices.push_back(vert[2]);
@@ -191,6 +333,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert[0].position.z = rad * sinf(theta)* sinf(phi);
 				vert[0].texCoord.x = (1 / vertexCount)*x;
 				vert[0].texCoord.y = (1 / vertexCount)*z;
+				vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
 
 				rad = (noiseMap.noiseData[(z + 1) * vertexCount + x] * maxRad);
 
@@ -201,6 +344,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert[1].position.z = rad * sinf(theta)* sinf(phi);
 				vert[1].texCoord.x = (1 / vertexCount)*x;
 				vert[1].texCoord.y = (1 / vertexCount)*z;
+				vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
 
 				rad = (noiseMap.noiseData[(z + 1) * vertexCount + (x + 1)] * maxRad);
 
@@ -211,6 +355,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert[2].position.z = rad * sinf(theta)* sinf(phi);
 				vert[2].texCoord.x = (1 / vertexCount)*x;
 				vert[2].texCoord.y = (1 / vertexCount)*z;
+				vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
 
 				v1 = vert[2].position - vert[0].position;
 				v2 = vert[2].position - vert[1].position;
@@ -224,6 +369,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				mesh.vertices.push_back(vert[0]);
 				mesh.vertices.push_back(vert[1]);
 				mesh.vertices.push_back(vert[2]);
+
 			}
 		}
 
@@ -246,4 +392,22 @@ void Planet::GenerateNewPlanet( GLfloat maxRad, GLfloat slices, GLfloat stacks, 
 void Planet::Render( Shader shader ){
 	glUniformMatrix4fv( glGetUniformLocation( shader.program, "model" ), 1, GL_FALSE, glm::value_ptr( this->transform.GetWorldMatrix() ) );
 	mesh.Draw( shader );
+}
+
+glm::vec3 Planet::CalculateHeigthColor( GLfloat height ) {
+
+	glm::vec3 result;
+
+	if ( height <= 15 ) result = glm::vec3( COLORBYTE( 255 ), 0.0f, 0.0f );
+	else if ( height <= 20 ) result = glm::vec3( COLORBYTE( 80 ), COLORBYTE( 54 ), COLORBYTE( 3 ) );
+	else if ( height <= 30 ) result = glm::vec3( COLORBYTE( 105 ), COLORBYTE( 54 ), COLORBYTE( 3 ) );
+	else if ( height <= 40 ) result = glm::vec3( COLORBYTE( 187 ), COLORBYTE( 96 ), COLORBYTE( 4 ) );
+	else if ( height <= 50 ) result = glm::vec3( COLORBYTE( 114 ), COLORBYTE( 191 ), COLORBYTE( 9 ) );
+	else if ( height <= 60 ) result = glm::vec3( COLORBYTE( 113 ), COLORBYTE( 150 ), COLORBYTE( 10 ) );
+	else if ( height <= 70 ) result = glm::vec3( COLORBYTE( 72 ), COLORBYTE( 140 ), COLORBYTE( 12 ) );
+	else if ( height <= 80 ) result = glm::vec3( COLORBYTE( 23 ), COLORBYTE( 140 ), COLORBYTE( 11 ) );
+	else if ( height <= 90 ) result = glm::vec3( COLORBYTE( 28 ), COLORBYTE( 123 ), COLORBYTE( 45 ) );
+	else if ( height <= 100 ) result = glm::vec3( COLORBYTE( 188 ), COLORBYTE( 203 ), COLORBYTE( 194 ) );
+
+	return result;
 }

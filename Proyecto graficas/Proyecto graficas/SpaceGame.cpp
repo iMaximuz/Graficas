@@ -5,13 +5,13 @@
 #include "Planet.h"
 //#include "Model.h"
 
-#define MAX_PLANETS			500
+#define MAX_PLANETS			250
 
 Shader* basicShader;
 Planet *planets;
 Sphere *sphere;
 Sphere *Skydome;
-
+Heightmap *terreno;
 
 
 SpaceGame::SpaceGame() {
@@ -37,16 +37,16 @@ void SpaceGame::Init(){
 
 	basicShader = new Shader( "Shaders/terrain.vert", "Shaders/terrain.frag" );
 
-	Heightmap *terreno = new Heightmap(0, 16, 32, 100, 50);
-	sphere = new Sphere( 2, 32, 32, Mesh_Element );
-	
+	terreno = new Heightmap(0, 16, 32, 100, 50);
+	sphere = new Sphere( 2, 32, 32, Mesh_Arrays );
 	Sphere* esfera = new Sphere(2, 32, 32, Mesh_Arrays);
 	
 
 	//Model* nave = new Model( "Models/Arwing_001.obj" );
 
-	Planet *planet = new Planet( 5, 32, 32, 0, 32 );
-	planet->transform.Translate( glm::vec3( 0, 0, 5 ));
+	//Planet *planet = new Planet( 700, 128, 128, 0, 512 );
+	Planet *planet = new Planet( "Textures//heightMap1.bmp", 5 );
+	planet->transform.Translate( glm::vec3( 0, 0, 5));
 	
 	planets = new Planet[MAX_PLANETS];
 	
@@ -55,8 +55,6 @@ void SpaceGame::Init(){
 
 
 	for ( int i = 0; i < MAX_PLANETS; i++ ) {
-
-		
 
 		GLfloat randX = rand() % (int)maxDistance.x - 100;
 		GLfloat randY = rand() % (int)maxDistance.y - 100;
@@ -76,7 +74,7 @@ void SpaceGame::Init(){
 	AddObject( sphere );
 	AddObject( planet );
 	//AddObject( nave );
-	//AddObject( terreno );
+	AddObject( terreno );
 }
 
 void SpaceGame::Input( InputInfo input, GLfloat dt){
@@ -101,6 +99,11 @@ void SpaceGame::Input( InputInfo input, GLfloat dt){
 
 	mainCamera->Rotate( input.mouseDeltaX, input.mouseDeltaY );
 
+	if (input.keys[GLFW_KEY_BACKSPACE]) {
+		terreno->GenerateNewTerrain ( rand (), 32, 32, 100, 100 );
+		terreno->transform.worldMatrix = glm::mat4 ();
+		terreno->transform.Translate( glm::vec3( -terreno->GetWorldSize().x * 0.5f, -50.0f, -terreno->GetWorldSize().y * 0.5f ) );
+	}
 
 	if ( input.keys[GLFW_KEY_ESCAPE] ) {
 		this->LockMouse( false );
@@ -136,8 +139,11 @@ void SpaceGame::Render(){
 	glm::vec3 lightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
 	glm::vec3 objectColor = glm::vec3( 0.6f, 0.6f, 0.6f );
 
-	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
-
+	#if 0
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
+	#else
+	glPolygonMode ( GL_FRONT_AND_BACK, GL_FILL );
+	#endif
 	basicShader->Use();
 
 	glUniformMatrix4fv( glGetUniformLocation( basicShader->program, "projection" ), 1, GL_FALSE, glm::value_ptr( mainCamera->GetProjectionMatrix() ) );
@@ -147,12 +153,12 @@ void SpaceGame::Render(){
 	glUniform3f( glGetUniformLocation( basicShader->program, "lightPosition" ), lightPosition.x, lightPosition.y, lightPosition.z );
 	glUniform3f( glGetUniformLocation( basicShader->program, "lightColor" ), lightColor.r, lightColor.g, lightColor.b );
 	glUniform3f( glGetUniformLocation( basicShader->program, "objectColor" ), objectColor.r, objectColor.g, objectColor.b );
-	/*
+	
 	for ( int i = 0; i < MAX_PLANETS; i++ ) {
 
 		planets[i].Render( *basicShader );
 
 	}
-	*/
+	
 	RootRender( *basicShader );
 }

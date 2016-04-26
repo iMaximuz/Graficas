@@ -5,7 +5,11 @@
 #include "GameObject.h"
 #include "Mesh.h"
 
-
+struct HeightmapFile {
+	GLint sizeX;
+	GLint sizeY;
+	GLfloat* data;
+};
 
 class Heightmap : public GameObject{
 
@@ -17,7 +21,11 @@ class Heightmap : public GameObject{
 	GLuint worldSizeZ;
 	GLfloat maxHeight;
 
+	MeshRenderMode renderMode;
+
 public:
+
+
 
 	Heightmap( GLuint seed, GLuint noiseSize, GLuint gridSize, GLfloat worldSize, GLfloat maxHeight){
 
@@ -44,6 +52,8 @@ public:
 	void GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSize, GLfloat worldSize, GLfloat maxHeight );
 
 	void LoadTerrain( const GLchar* path, GLfloat maxHeight );
+
+	glm::vec3 CalculateHeigthColor ( GLfloat height );
 
 
 	inline glm::vec2 GetWorldSize() {

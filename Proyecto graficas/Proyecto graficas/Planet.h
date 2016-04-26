@@ -16,11 +16,14 @@ class Planet : public GameObject {
 	void GeneratePlanet(GLuint seed, GLuint noiseSize );
 
 	MeshRenderMode renderMode;
-
+	glm::vec3 CalculateHeigthColor( GLfloat );
 public:
 
 	Planet() {}
 	Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
+	Planet( const GLchar* filePath, GLfloat maxRad );
+
+	void LoadHeightMap( const GLchar* filePath, GLfloat maxRad );
 
 	void GenerateNewPlanet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
 

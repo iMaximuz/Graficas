@@ -111,7 +111,8 @@ void Sphere::GenerateSphere()
 				vert[0].position.z = rad * sinf(theta)* sinf(phi);
 				vert[0].texCoord.x = (1 / vertexCount)*x;
 				vert[0].texCoord.y = (1 / vertexCount)*z;
-				
+				vert[0].color = glm::vec3 ( 1.0f, 1.0f, 1.0f );
+
 				theta = (z + 1) * PI * 2 / slices;
 				phi = x * PI / stacks;
 				vert[1].position.x = rad * cosf(theta)* sinf(phi);
@@ -119,7 +120,8 @@ void Sphere::GenerateSphere()
 				vert[1].position.z = rad * sinf(theta)* sinf(phi);
 				vert[1].texCoord.x = (1 / vertexCount)*x;
 				vert[1].texCoord.y = (1 / vertexCount)*z;
-				
+				vert[1].color = glm::vec3 ( 1.0f, 1.0f, 1.0f );
+
 				theta = z * PI * 2 / slices;
 				phi = (x + 1) * PI / stacks;
 				vert[2].position.x = rad * cosf(theta)* sinf(phi);
@@ -127,7 +129,8 @@ void Sphere::GenerateSphere()
 				vert[2].position.z = rad * sinf(theta)* sinf(phi);
 				vert[2].texCoord.x = (1 / vertexCount)*x;
 				vert[2].texCoord.y = (1 / vertexCount)*z;
-				
+				vert[2].color = glm::vec3 ( 1.0f, 1.0f, 1.0f );
+
 				glm::vec3 v1 = vert[1].position - vert[0].position;
 				glm::vec3 v2 = vert[1].position - vert[2].position;
 
@@ -148,6 +151,7 @@ void Sphere::GenerateSphere()
 				vert[0].position.z = rad * sinf(theta)* sinf(phi);
 				vert[0].texCoord.x = (1 / vertexCount)*x;
 				vert[0].texCoord.y = (1 / vertexCount)*z;
+				vert[0].color = glm::vec3 ( 1.0f, 1.0f, 1.0f );
 
 				theta = (z + 1) * PI * 2 / slices;
 				phi = x * PI / stacks;
@@ -156,6 +160,7 @@ void Sphere::GenerateSphere()
 				vert[1].position.z = rad * sinf(theta)* sinf(phi);
 				vert[1].texCoord.x = (1 / vertexCount)*x;
 				vert[1].texCoord.y = (1 / vertexCount)*z;
+				vert[1].color = glm::vec3 ( 1.0f, 1.0f, 1.0f );
 
 				theta = (z + 1) * PI * 2 / slices;
 				phi = (x + 1) * PI / stacks;
@@ -164,6 +169,7 @@ void Sphere::GenerateSphere()
 				vert[2].position.z = rad * sinf(theta)* sinf(phi);
 				vert[2].texCoord.x = (1 / vertexCount)*x;
 				vert[2].texCoord.y = (1 / vertexCount)*z;
+				vert[2].color = glm::vec3 ( 1.0f, 1.0f, 1.0f );
 
 				v1 = vert[2].position - vert[0].position;
 				v2 = vert[2].position - vert[1].position;
