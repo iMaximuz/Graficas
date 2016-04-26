@@ -38,13 +38,15 @@ void SpaceGame::Init(){
 	basicShader = new Shader( "Shaders/terrain.vert", "Shaders/terrain.frag" );
 
 	Heightmap *terreno = new Heightmap(0, 16, 32, 100, 50);
-	sphere = new Sphere( 2, 32, 32 );
-
+	sphere = new Sphere( 2, 32, 32, Mesh_Element );
+	
+	Sphere* esfera = new Sphere(2, 32, 32, Mesh_Arrays);
+	
 
 	//Model* nave = new Model( "Models/Arwing_001.obj" );
 
-	Planet *planet = new Planet( 1000, 32, 32, 0, 0 );
-	planet->transform.Translate( glm::vec3( 0, 0, 700 ));
+	Planet *planet = new Planet( 5, 32, 32, 0, 32 );
+	planet->transform.Translate( glm::vec3( 0, 0, 5 ));
 	
 	planets = new Planet[MAX_PLANETS];
 	
@@ -69,6 +71,8 @@ void SpaceGame::Init(){
 
 	terreno->transform.Translate(glm::vec3(-terreno->GetWorldSize().x * 0.5f, 0.0f, -terreno->GetWorldSize().y * 0.5f));
 
+
+	AddObject( esfera );
 	AddObject( sphere );
 	AddObject( planet );
 	//AddObject( nave );
@@ -132,7 +136,7 @@ void SpaceGame::Render(){
 	glm::vec3 lightColor = glm::vec3( 1.0f, 1.0f, 1.0f );
 	glm::vec3 objectColor = glm::vec3( 0.6f, 0.6f, 0.6f );
 
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 
 	basicShader->Use();
 
@@ -143,12 +147,12 @@ void SpaceGame::Render(){
 	glUniform3f( glGetUniformLocation( basicShader->program, "lightPosition" ), lightPosition.x, lightPosition.y, lightPosition.z );
 	glUniform3f( glGetUniformLocation( basicShader->program, "lightColor" ), lightColor.r, lightColor.g, lightColor.b );
 	glUniform3f( glGetUniformLocation( basicShader->program, "objectColor" ), objectColor.r, objectColor.g, objectColor.b );
-
+	/*
 	for ( int i = 0; i < MAX_PLANETS; i++ ) {
 
 		planets[i].Render( *basicShader );
 
 	}
-
+	*/
 	RootRender( *basicShader );
 }

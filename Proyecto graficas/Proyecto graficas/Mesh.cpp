@@ -29,7 +29,9 @@ Mesh::~Mesh() {
 	}
 }
 
-void Mesh::setupMesh() {
+void Mesh::setupMesh(MeshRenderMode mode) {
+
+	this->renderMode = mode;
 
 	if ( this->VAO != 0 && this->VBO != 0 && this->EBO != 0 ) {
 		glDeleteVertexArrays( 1, &this->VAO );
@@ -45,9 +47,10 @@ void Mesh::setupMesh() {
 	glBindBuffer( GL_ARRAY_BUFFER, this->VBO );
 	glBufferData( GL_ARRAY_BUFFER, this->vertices.size() * sizeof( Vertex ), &this->vertices[0], GL_STATIC_DRAW );
 	
-	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, this->EBO );
-	glBufferData( GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof( GLuint ), &this->indices[0], GL_STATIC_DRAW );
-
+	if (this->renderMode == Mesh_Element) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint), &this->indices[0], GL_STATIC_DRAW);
+	}
 	glEnableVertexAttribArray( 0 );
 	glEnableVertexAttribArray( 1 );
 	glEnableVertexAttribArray( 2 );
@@ -82,7 +85,12 @@ void Mesh::Draw( Shader shader ) {
 
 	glBindVertexArray( this->VAO );
 	//glDrawArrays( GL_TRIANGLES, 0, vertices.size() );
-	glDrawElements( GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0 );
+	if (this->renderMode == Mesh_Element) {
+		glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+	}
+	else if(this->renderMode == Mesh_Arrays) {
+		glDrawArrays(GL_TRIANGLES, 0, this->vertices.size());
+	}
 	glBindVertexArray( 0 );
 
 	for ( GLuint i = 0; i < this->textures.size(); i++ )

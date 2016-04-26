@@ -15,6 +15,8 @@ class Planet : public GameObject {
 
 	void GeneratePlanet(GLuint seed, GLuint noiseSize );
 
+	MeshRenderMode renderMode;
+
 public:
 
 	Planet() {}

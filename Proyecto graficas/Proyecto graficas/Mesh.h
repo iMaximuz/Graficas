@@ -26,20 +26,28 @@ struct Texture {
 	aiString path;
 };
 
+enum MeshRenderMode{
+	Mesh_Arrays,
+	Mesh_Element
+};
+
 class Mesh {
 
 	GLuint VBO, EBO, VAO;
+	MeshRenderMode renderMode;
 
 public:
+	
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Texture> textures;
-	void setupMesh();
+	void setupMesh(MeshRenderMode mode);
 
 	Mesh();
 	Mesh( std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures );
 	~Mesh();
 	void Draw( Shader shader );
+	inline void SetRenderMode(MeshRenderMode mode) { this->renderMode = mode; }
 };
 
 #endif

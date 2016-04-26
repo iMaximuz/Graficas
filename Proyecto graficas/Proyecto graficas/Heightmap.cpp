@@ -97,7 +97,7 @@ void Heightmap::GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSi
 
 	delete normals;
 
-	mesh.setupMesh();
+	mesh.setupMesh(Mesh_Element);
 }
 
 void Heightmap::LoadTerrain(const GLchar* path, GLfloat maxHeight) {

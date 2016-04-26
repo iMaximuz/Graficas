@@ -15,9 +15,11 @@ class Sphere : public GameObject{
 
 	void GenerateSphere();
 
+	MeshRenderMode renderMode;
+
 public:
 
-	Sphere( GLfloat rad, GLfloat slices, GLfloat stacks );
+	Sphere( GLfloat rad, GLfloat slices, GLfloat stacks, MeshRenderMode mode );
 
 	void Render( Shader shader );
 
