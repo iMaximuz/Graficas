@@ -5,7 +5,30 @@
 #include "Planet.h"
 //#include "Model.h"
 
-#define MAX_PLANETS			250
+
+/*
+TODO LIST
+
+	- Crear la clase SphereData que me permita solo obtener los valores de los vertices individuales para despues crear el mesh por separado
+	- Mejorar la generacion de "planetas" usando la clase SphereData
+	- Renombrar la clase planetas
+	- Mejorar la paleta de colores del planeta
+	- Cargar el modelo de la nave
+	- Crear skydome
+	- Crear el Sol con un mesh animado como si fuera agua
+	- Manejar la nave en primera persona
+	- Manejar la nave en tercera persona
+	- Disparar
+	- "Colisionar" con asteroides
+	- Crear enemigos
+	
+*/
+
+
+
+
+
+#define MAX_PLANETS			5
 
 Shader* basicShader;
 Planet *planets;
@@ -62,7 +85,7 @@ void SpaceGame::Init(){
 		
 		GLfloat randRad = rand() % 9 + 1;
 
-		planets[i].GenerateNewPlanet( randRad, 8, 8, rand(),  16);
+		planets[i].GenerateNewPlanet( 9, 10, 16, 16, rand(),  16);
 		planets[i].transform.Translate( glm::vec3( randX, randY, randZ ) );
 
 	}

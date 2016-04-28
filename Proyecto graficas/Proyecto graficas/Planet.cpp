@@ -6,7 +6,8 @@
 #define COLORBYTE(x) (GLfloat)x / 255.0f
 
 
-Planet::Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
+Planet::Planet( GLfloat minRad, GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
+	this->minRad = minRad;
 	this->maxRad = maxRad;
 	this->slices = slices;
 	this->stacks = stacks;
@@ -196,8 +197,8 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 
 
 				//TODO: Acomodar el orden correcto
-
-				GLfloat rad = (noiseMap.noiseData[z * vertexCount + x] * maxRad);
+				//output = min + (rand() % (int)(max - min + 1))
+				GLfloat rad = minRad + rand() % (GLint)(maxRad - minRad + 1);//(noiseMap.noiseData[z * vertexCount + x] * maxRad);
 
 				vert.position.x = rad * cosf(theta)* sinf(phi);
 				vert.position.y = rad * cosf(phi);
@@ -205,6 +206,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
 				vert.texCoord.x = (1 / vertexCount)*x;
 				vert.texCoord.y = (1 / vertexCount)*z;
+				vert.color = glm::vec3( 1.0f, 1.0f, 1.0f );
 
 				mesh.vertices.push_back(vert);
 
@@ -301,39 +303,43 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 
 				Vertex vert[3];
 
-				GLfloat rad = (noiseMap.noiseData[z * vertexCount + x] * maxRad);
+				GLfloat rad[3];
+#if 0
+				rad[0] = myMath::MapValue(noiseMap.noiseData[z * vertexCount + x], 0, 1, minRad, maxRad );
+				rad[1] = myMath::MapValue(noiseMap.noiseData[(z + 1) * vertexCount + x], 0, 1, minRad, maxRad);
+				rad[2] = myMath::MapValue(noiseMap.noiseData[z * vertexCount + (x + 1)], 0, 1, minRad, maxRad);
 
+#else
+				rad[0] = myMath::MapValue( rand() % (GLint)maxRad + minRad, 0, 1, minRad, maxRad );
+				rad[1] = myMath::MapValue( rand() % (GLint)maxRad + minRad, 0, 1, minRad, maxRad );
+				rad[2] = myMath::MapValue( rand() % (GLint)maxRad + minRad, 0, 1, minRad, maxRad );
+#endif
 				theta = z * PI * 2 / slices;
 				phi = x * PI / stacks;
-				vert[0].position.x = rad * cosf(theta)* sinf(phi);
-				vert[0].position.y = rad * cosf(phi);
-				vert[0].position.z = rad * sinf(theta)* sinf(phi);
+				vert[0].position.x = rad[0] * cosf(theta)* sinf(phi);
+				vert[0].position.y = rad[0] * cosf(phi);
+				vert[0].position.z = rad[0] * sinf(theta)* sinf(phi);
 				vert[0].texCoord.x = (1 / vertexCount)*x;
 				vert[0].texCoord.y = (1 / vertexCount)*z;
-				vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-
-				rad = (noiseMap.noiseData[(z + 1) * vertexCount + x] * maxRad);
+				vert[0].color = CalculateHeigthColor( myMath::MapValue( rad[0], minRad, maxRad, 0, 100 ) );
 
 				theta = (z + 1) * PI * 2 / slices;
 				phi = x * PI / stacks;
-				vert[1].position.x = rad * cosf(theta)* sinf(phi);
-				vert[1].position.y = rad * cosf(phi);
-				vert[1].position.z = rad * sinf(theta)* sinf(phi);
+				vert[1].position.x = rad[1] * cosf(theta)* sinf(phi);
+				vert[1].position.y = rad[1] * cosf(phi);
+				vert[1].position.z = rad[1] * sinf(theta)* sinf(phi);
 				vert[1].texCoord.x = (1 / vertexCount)*x;
 				vert[1].texCoord.y = (1 / vertexCount)*z;
-				vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-				rad = (noiseMap.noiseData[z * vertexCount + (x + 1)] * maxRad);
+				vert[1].color = CalculateHeigthColor( myMath::MapValue( rad[1], minRad, maxRad, 0, 100 ) );
 
 				theta = z * PI * 2 / slices;
 				phi = (x + 1) * PI / stacks;
-				vert[2].position.x = rad * cosf(theta)* sinf(phi);
-				vert[2].position.y = rad * cosf(phi);
-				vert[2].position.z = rad * sinf(theta)* sinf(phi);
+				vert[2].position.x = rad[2] * cosf(theta)* sinf(phi);
+				vert[2].position.y = rad[2] * cosf(phi);
+				vert[2].position.z = rad[2] * sinf(theta)* sinf(phi);
 				vert[2].texCoord.x = (1 / vertexCount)*x;
 				vert[2].texCoord.y = (1 / vertexCount)*z;
-				vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+				vert[2].color = CalculateHeigthColor( myMath::MapValue( rad[2], minRad, maxRad, 0, 100 ) );
 
 				glm::vec3 v1 = vert[1].position - vert[0].position;
 				glm::vec3 v2 = vert[1].position - vert[2].position;
@@ -348,38 +354,45 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 				mesh.vertices.push_back(vert[1]);
 				mesh.vertices.push_back(vert[2]);
 
-				rad = (noiseMap.noiseData[z * vertexCount + (x + 1)] * maxRad);
+
+#if 0
+				rad[0] = myMath::MapValue( noiseMap.noiseData[z * vertexCount + (x + 1)], 0, 1, minRad, maxRad );
+				rad[1] = myMath::MapValue( noiseMap.noiseData[(z + 1) * vertexCount + x], 0, 1, minRad, maxRad );
+				rad[2] = myMath::MapValue( noiseMap.noiseData[(z + 1) * vertexCount + (x + 1)], 0, 1, minRad, maxRad );
+
+#else
+				rad[0] = myMath::MapValue( rand() % (GLint)maxRad + minRad, 0, 1, minRad, maxRad );
+				rad[1] = myMath::MapValue( rand() % (GLint)maxRad + minRad, 0, 1, minRad, maxRad );
+				rad[2] = myMath::MapValue( rand() % (GLint)maxRad + minRad, 0, 1, minRad, maxRad );
+#endif
+
 
 				theta = z * PI * 2 / slices;
 				phi = (x + 1) * PI / stacks;
-				vert[0].position.x = rad * cosf(theta)* sinf(phi);
-				vert[0].position.y = rad * cosf(phi);
-				vert[0].position.z = rad * sinf(theta)* sinf(phi);
+				vert[0].position.x = rad[0] * cosf(theta)* sinf(phi);
+				vert[0].position.y = rad[0] * cosf(phi);
+				vert[0].position.z = rad[0] * sinf(theta)* sinf(phi);
 				vert[0].texCoord.x = (1 / vertexCount)*x;
 				vert[0].texCoord.y = (1 / vertexCount)*z;
-				vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-				rad = (noiseMap.noiseData[(z + 1) * vertexCount + x] * maxRad);
+				vert[0].color = CalculateHeigthColor( myMath::MapValue( rad[0], minRad, maxRad, 0, 100 ) );
 
 				theta = (z + 1) * PI * 2 / slices;
 				phi = x * PI / stacks;
-				vert[1].position.x = rad * cosf(theta)* sinf(phi);
-				vert[1].position.y = rad * cosf(phi);
-				vert[1].position.z = rad * sinf(theta)* sinf(phi);
+				vert[1].position.x = rad[1] * cosf(theta)* sinf(phi);
+				vert[1].position.y = rad[1] * cosf(phi);
+				vert[1].position.z = rad[1] * sinf(theta)* sinf(phi);
 				vert[1].texCoord.x = (1 / vertexCount)*x;
 				vert[1].texCoord.y = (1 / vertexCount)*z;
-				vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-				rad = (noiseMap.noiseData[(z + 1) * vertexCount + (x + 1)] * maxRad);
+				vert[1].color = CalculateHeigthColor( myMath::MapValue( rad[1], minRad, maxRad, 0, 100 ) );
 
 				theta = (z + 1) * PI * 2 / slices;
 				phi = (x + 1) * PI / stacks;
-				vert[2].position.x = rad * cosf(theta)* sinf(phi);
-				vert[2].position.y = rad * cosf(phi);
-				vert[2].position.z = rad * sinf(theta)* sinf(phi);
+				vert[2].position.x = rad[2] * cosf(theta)* sinf(phi);
+				vert[2].position.y = rad[2] * cosf(phi);
+				vert[2].position.z = rad[2] * sinf(theta)* sinf(phi);
 				vert[2].texCoord.x = (1 / vertexCount)*x;
 				vert[2].texCoord.y = (1 / vertexCount)*z;
-				vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+				vert[2].color = CalculateHeigthColor( myMath::MapValue( rad[2], minRad, maxRad, 0, 100 ) );
 
 				v1 = vert[2].position - vert[0].position;
 				v2 = vert[2].position - vert[1].position;
@@ -405,11 +418,12 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 	mesh.setupMesh(this->renderMode);
 }
 
-void Planet::GenerateNewPlanet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
+void Planet::GenerateNewPlanet( GLfloat minRad, GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
+	this->minRad = minRad;
 	this->maxRad = maxRad;
 	this->slices = slices;
 	this->stacks = stacks;
-	this->renderMode = Mesh_Arrays;
+	this->renderMode = Mesh_Elements;
 	GeneratePlanet( seed, noiseSize );
 }
 

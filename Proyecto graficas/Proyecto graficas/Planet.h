@@ -21,12 +21,12 @@ class Planet : public GameObject {
 public:
 
 	Planet() {}
-	Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
+	Planet( GLfloat minRad, GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
 	Planet( const GLchar* filePath, GLfloat minRad, GLfloat maxRad );
 
 	void LoadHeightMap( const GLchar* filePath, GLfloat minRad, GLfloat maxRad );
 
-	void GenerateNewPlanet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
+	void GenerateNewPlanet( GLfloat minRad, GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
 
 	void Update( GLfloat dt );
 	void Render( Shader shader );
