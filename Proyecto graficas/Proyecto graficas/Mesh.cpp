@@ -47,7 +47,7 @@ void Mesh::setupMesh(MeshRenderMode mode) {
 	glBindBuffer( GL_ARRAY_BUFFER, this->VBO );
 	glBufferData( GL_ARRAY_BUFFER, this->vertices.size() * sizeof( Vertex ), &this->vertices[0], GL_STATIC_DRAW );
 	
-	if (this->renderMode == Mesh_Element) {
+	if (this->renderMode == Mesh_Elements) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint), &this->indices[0], GL_STATIC_DRAW);
 	}
@@ -87,7 +87,7 @@ void Mesh::Draw( Shader shader ) {
 
 	glBindVertexArray( this->VAO );
 	//glDrawArrays( GL_TRIANGLES, 0, vertices.size() );
-	if (this->renderMode == Mesh_Element) {
+	if (this->renderMode == Mesh_Elements) {
 		glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 	}
 	else if(this->renderMode == Mesh_Arrays) {

@@ -17,8 +17,8 @@ out vec3 fragColor;
 
 void main(){
 
-    fragNormal = Normal;
-    fragPosition = vec3(model * vec4(Position, 1.0f));
+    fragNormal = vec3( model * vec4(Normal, 0.0f));
+    fragPosition = vec3( model * vec4(Position, 1.0f));
     fragColor = Color;
     gl_Position = projection * view * model * vec4(Position, 1.0);
 }

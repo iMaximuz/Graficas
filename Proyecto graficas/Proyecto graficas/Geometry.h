@@ -22,7 +22,7 @@ public:
 	Sphere( GLfloat rad, GLfloat slices, GLfloat stacks, MeshRenderMode mode );
 
 	void Render( Shader shader );
-
+	void Update( GLfloat dt );
 
 };
 

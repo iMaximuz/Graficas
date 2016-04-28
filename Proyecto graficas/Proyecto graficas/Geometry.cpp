@@ -17,7 +17,7 @@ void Sphere::GenerateSphere()
 	
 	//TODO: Calcular normales por cara
 	glm::vec3* normals = new glm::vec3[(slices + 1) * (stacks + 1) * 2];
-	if (this->renderMode == Mesh_Element) {
+	if (this->renderMode == Mesh_Elements) {
 		for (int z = 0; z < slices + 1; z++) {
 			for (int x = 0; x < stacks + 1; x++) {
 
@@ -196,4 +196,12 @@ void Sphere::Render( Shader shader )
 {
 	glUniformMatrix4fv( glGetUniformLocation( shader.program, "model" ), 1, GL_FALSE, glm::value_ptr( this->transform.GetWorldMatrix() ) );
 	mesh.Draw( shader );
+}
+
+void Sphere::Update( GLfloat dt ) {
+
+	GLfloat angle = glm::radians( -20.0f ) * dt;
+
+	transform.Rotate( angle, glm::vec3( 0.0f, 1.0f, 0.0f ) );
+
 }

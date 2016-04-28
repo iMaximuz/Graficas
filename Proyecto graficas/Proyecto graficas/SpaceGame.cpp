@@ -45,8 +45,8 @@ void SpaceGame::Init(){
 	//Model* nave = new Model( "Models/Arwing_001.obj" );
 
 	//Planet *planet = new Planet( 700, 128, 128, 0, 512 );
-	Planet *planet = new Planet( "Textures//heightMap1.bmp", 5 );
-	planet->transform.Translate( glm::vec3( 0, 0, 5));
+	Planet *planet = new Planet( "Textures//moon3.bmp", 980, 1000 );
+	planet->transform.Translate( glm::vec3( 0, 0, -1300));
 	
 	planets = new Planet[MAX_PLANETS];
 	
@@ -67,7 +67,7 @@ void SpaceGame::Init(){
 
 	}
 
-	terreno->transform.Translate(glm::vec3(-terreno->GetWorldSize().x * 0.5f, 0.0f, -terreno->GetWorldSize().y * 0.5f));
+	terreno->transform.Translate(glm::vec3(-terreno->GetWorldSize() * 0.5f , 0.0f, -terreno->GetWorldSize() * 0.5f));
 
 
 	AddObject( esfera );
@@ -102,7 +102,7 @@ void SpaceGame::Input( InputInfo input, GLfloat dt){
 	if (input.keys[GLFW_KEY_BACKSPACE]) {
 		terreno->GenerateNewTerrain ( rand (), 32, 32, 100, 100 );
 		terreno->transform.worldMatrix = glm::mat4 ();
-		terreno->transform.Translate( glm::vec3( -terreno->GetWorldSize().x * 0.5f, -50.0f, -terreno->GetWorldSize().y * 0.5f ) );
+		terreno->transform.Translate( glm::vec3( -terreno->GetWorldSize() * 0.5f, -50.0f, -terreno->GetWorldSize() * 0.5f ) );
 	}
 
 	if ( input.keys[GLFW_KEY_ESCAPE] ) {
@@ -131,7 +131,7 @@ void SpaceGame::Render(){
 	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	//glm::vec3 lightPosition = glm::vec3( 0, 10.0f, 0 );
+	//glm::vec3 lightPosition = glm::vec3( 10.0f, 0.0f, 0 );
 	glm::vec3 lightPosition = glm::vec3( std::sin( PI/16 * glfwGetTime() * 2) * 32.0f, 15.0f, std::cos( PI / 16 * glfwGetTime() * 2 ) * 32.0f );
 	sphere->transform.worldMatrix = glm::mat4();
 	sphere->transform.Translate( lightPosition );

@@ -5,6 +5,7 @@
 
 #define COLORBYTE(x) (GLfloat)x / 255.0f
 
+
 Planet::Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
 	this->maxRad = maxRad;
 	this->slices = slices;
@@ -14,12 +15,13 @@ Planet::Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0,
 	GeneratePlanet(seed, noiseSize);
 }
 
-Planet::Planet( const GLchar* filePath, GLfloat maxRad ) {
+Planet::Planet( const GLchar* filePath, GLfloat minRad, GLfloat maxRad ) {
 	this->maxRad = maxRad;
-	LoadHeightMap( filePath, maxRad );
+	this->minRad = minRad;
+	LoadHeightMap( filePath, minRad, maxRad );
 }
 
-void Planet::LoadHeightMap( const GLchar* filePath, GLfloat maxRad ) {
+void Planet::LoadHeightMap( const GLchar* filePath,  GLfloat minRad, GLfloat maxRad ) {
 
 	HeightmapFile hMap;
 
@@ -31,56 +33,52 @@ void Planet::LoadHeightMap( const GLchar* filePath, GLfloat maxRad ) {
 	int stride = 0;
 	for ( int y = 0; y < hMap.sizeY; y++ ) {
 		for ( int x = 0; x < hMap.sizeX; x++ ) {
-			hMap.data[y * hMap.sizeX + x] = COLORBYTE(*(image + stride));
+			hMap.data[y * hMap.sizeX + x] = COLORBYTE( image[(y * hMap.sizeX + x) * 3] );
 			stride += 3;
 		}
 	}
 
 	this->stacks = hMap.sizeX;
 	this->slices = hMap.sizeY;
-	GLint vertexCount = stacks + 1;
+	GLint vertexCount = stacks - 2;
 	
 	GLfloat theta = 0;
 	GLfloat phi = 0;
 
-	for ( int z = 0; z < slices - 1; z++ ) {
-		for ( int x = 0; x < stacks - 1; x++ ) {
+	for ( int z = 0; z < slices; z++ ) {
+		for ( int x = 0; x < stacks; x++ ) {
 
 			Vertex vert[3];
 
-			GLfloat rad = (hMap.data[z * vertexCount + x] * maxRad);
-
+			GLfloat rad[3];
+			rad[0] = myMath::MapValue( hMap.data[z * vertexCount + x], 0, 1, minRad, maxRad );
+			rad[1] = myMath::MapValue( hMap.data[(z + 1) * vertexCount + x], 0, 1, minRad, maxRad );
+			rad[2] = myMath::MapValue( hMap.data[z * vertexCount + (x + 1)], 0, 1, minRad, maxRad );
+	
 			theta = z * PI * 2 / slices;
 			phi = x * PI / stacks;
-			vert[0].position.x = rad * cosf( theta )* sinf( phi );
-			vert[0].position.y = rad * cosf( phi );
-			vert[0].position.z = rad * sinf( theta )* sinf( phi );
+			vert[0].position.x = rad[0] * cosf( theta )* sinf( phi );
+			vert[0].position.y = rad[0] * cosf( phi );
+			vert[0].position.z = rad[0] * sinf( theta )* sinf( phi );
 			vert[0].texCoord.x = (1 / vertexCount)*x;
 			vert[0].texCoord.y = (1 / vertexCount)*z;
-			vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-
-			rad = (hMap.data[(z + 1) * vertexCount + x] * maxRad);
 
 			theta = (z + 1) * PI * 2 / slices;
 			phi = x * PI / stacks;
-			vert[1].position.x = rad * cosf( theta )* sinf( phi );
-			vert[1].position.y = rad * cosf( phi );
-			vert[1].position.z = rad * sinf( theta )* sinf( phi );
+			vert[1].position.x = rad[1] * cosf( theta )* sinf( phi );
+			vert[1].position.y = rad[1] * cosf( phi );
+			vert[1].position.z = rad[1] * sinf( theta )* sinf( phi );
 			vert[1].texCoord.x = (1 / vertexCount)*x;
 			vert[1].texCoord.y = (1 / vertexCount)*z;
-			vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-			rad = (hMap.data[z * vertexCount + (x + 1)] * maxRad);
 
 			theta = z * PI * 2 / slices;
 			phi = (x + 1) * PI / stacks;
-			vert[2].position.x = rad * cosf( theta )* sinf( phi );
-			vert[2].position.y = rad * cosf( phi );
-			vert[2].position.z = rad * sinf( theta )* sinf( phi );
+			vert[2].position.x = rad[2] * cosf( theta )* sinf( phi );
+			vert[2].position.y = rad[2] * cosf( phi );
+			vert[2].position.z = rad[2] * sinf( theta )* sinf( phi );
 			vert[2].texCoord.x = (1 / vertexCount)*x;
 			vert[2].texCoord.y = (1 / vertexCount)*z;
-			vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
+			
 
 			glm::vec3 v1 = vert[1].position - vert[0].position;
 			glm::vec3 v2 = vert[1].position - vert[2].position;
@@ -91,42 +89,53 @@ void Planet::LoadHeightMap( const GLchar* filePath, GLfloat maxRad ) {
 			vert[1].normal = normal;
 			vert[2].normal = normal;
 
+
+#if FLAT_SHADING
+			GLfloat averageRad = (rad[0] + rad[1] + rad[2]) / 3;
+			GLfloat totalRad = myMath::MapValue( averageRad, minRad, maxRad, 0, 100 );;
+			glm::vec3 finalColor = CalculateHeigthColor( totalRad );
+
+			vert[0].color = finalColor;
+			vert[1].color = finalColor;
+			vert[2].color = finalColor;
+#else
+			vert[0].color = CalculateHeigthColor( myMath::MapValue( rad[0], minRad, maxRad, 0, 100 ) );
+			vert[1].color = CalculateHeigthColor( myMath::MapValue( rad[1], minRad, maxRad, 0, 100 ) );
+			vert[2].color = CalculateHeigthColor( myMath::MapValue( rad[2], minRad, maxRad, 0, 100 ) );
+
+#endif		
+
 			mesh.vertices.push_back( vert[0] );
 			mesh.vertices.push_back( vert[1] );
 			mesh.vertices.push_back( vert[2] );
 
-			rad = (hMap.data[z * vertexCount + (x + 1)] * maxRad);
+			rad[0] = myMath::MapValue( hMap.data[z * vertexCount + (x + 1)], 0, 1, minRad, maxRad);
+			rad[1] = myMath::MapValue( hMap.data[(z + 1) * vertexCount + x], 0, 1, minRad, maxRad );
+			rad[2] = myMath::MapValue( hMap.data[(z + 1) * vertexCount + (x + 1)], 0, 1, minRad, maxRad );
 
 			theta = z * PI * 2 / slices;
 			phi = (x + 1) * PI / stacks;
-			vert[0].position.x = rad * cosf( theta )* sinf( phi );
-			vert[0].position.y = rad * cosf( phi );
-			vert[0].position.z = rad * sinf( theta )* sinf( phi );
+			vert[0].position.x = rad[0] * cosf( theta )* sinf( phi );
+			vert[0].position.y = rad[0] * cosf( phi );
+			vert[0].position.z = rad[0] * sinf( theta )* sinf( phi );
 			vert[0].texCoord.x = (1 / vertexCount)*x;
 			vert[0].texCoord.y = (1 / vertexCount)*z;
-			vert[0].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-			rad = (hMap.data[(z + 1) * vertexCount + x] * maxRad);
 
 			theta = (z + 1) * PI * 2 / slices;
 			phi = x * PI / stacks;
-			vert[1].position.x = rad * cosf( theta )* sinf( phi );
-			vert[1].position.y = rad * cosf( phi );
-			vert[1].position.z = rad * sinf( theta )* sinf( phi );
+			vert[1].position.x = rad[1] * cosf( theta )* sinf( phi );
+			vert[1].position.y = rad[1] * cosf( phi );
+			vert[1].position.z = rad[1] * sinf( theta )* sinf( phi );
 			vert[1].texCoord.x = (1 / vertexCount)*x;
 			vert[1].texCoord.y = (1 / vertexCount)*z;
-			vert[1].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
-
-			rad = (hMap.data[(z + 1) * vertexCount + (x + 1)] * maxRad);
 
 			theta = (z + 1) * PI * 2 / slices;
 			phi = (x + 1) * PI / stacks;
-			vert[2].position.x = rad * cosf( theta )* sinf( phi );
-			vert[2].position.y = rad * cosf( phi );
-			vert[2].position.z = rad * sinf( theta )* sinf( phi );
+			vert[2].position.x = rad[2] * cosf( theta )* sinf( phi );
+			vert[2].position.y = rad[2] * cosf( phi );
+			vert[2].position.z = rad[2] * sinf( theta )* sinf( phi );
 			vert[2].texCoord.x = (1 / vertexCount)*x;
 			vert[2].texCoord.y = (1 / vertexCount)*z;
-			vert[2].color = CalculateHeigthColor( myMath::MapValue( rad, 0, maxRad, 0, 100 ) );
 
 			v1 = vert[2].position - vert[0].position;
 			v2 = vert[2].position - vert[1].position;
@@ -136,6 +145,21 @@ void Planet::LoadHeightMap( const GLchar* filePath, GLfloat maxRad ) {
 			vert[0].normal = normal;
 			vert[1].normal = normal;
 			vert[2].normal = normal;
+
+#if FLAT_SHADING
+			averageRad = (rad[0] + rad[1] + rad[2]) / 3;
+			totalRad = myMath::MapValue( averageRad, minRad, maxRad, 0, 100 );;
+			finalColor = CalculateHeigthColor( totalRad );
+
+			vert[0].color = finalColor;
+			vert[1].color = finalColor;
+			vert[2].color = finalColor;
+#else
+			vert[0].color = CalculateHeigthColor( myMath::MapValue( rad[0], minRad, maxRad, 0, 100 ) );
+			vert[1].color = CalculateHeigthColor( myMath::MapValue( rad[1], minRad, maxRad, 0, 100 ) );
+			vert[2].color = CalculateHeigthColor( myMath::MapValue( rad[2], minRad, maxRad, 0, 100 ) );
+
+#endif		
 
 			mesh.vertices.push_back( vert[0] );
 			mesh.vertices.push_back( vert[1] );
@@ -160,7 +184,7 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 	GLfloat nPoleAverage = 0;
 	GLfloat sPoleAverage = 0;
 
-	if (this->renderMode == Mesh_Element) {
+	if (this->renderMode == Mesh_Elements) {
 
 		for (int z = 0; z < slices + 1; z++) {
 			for (int x = 0; x < stacks + 1; x++) {
@@ -398,7 +422,7 @@ glm::vec3 Planet::CalculateHeigthColor( GLfloat height ) {
 
 	glm::vec3 result;
 
-	if ( height <= 15 ) result = glm::vec3( COLORBYTE( 255 ), 0.0f, 0.0f );
+	if ( height <= 10 ) result = glm::vec3( COLORBYTE( 0 ), COLORBYTE( 100 ), COLORBYTE( 200 ) );
 	else if ( height <= 20 ) result = glm::vec3( COLORBYTE( 80 ), COLORBYTE( 54 ), COLORBYTE( 3 ) );
 	else if ( height <= 30 ) result = glm::vec3( COLORBYTE( 105 ), COLORBYTE( 54 ), COLORBYTE( 3 ) );
 	else if ( height <= 40 ) result = glm::vec3( COLORBYTE( 187 ), COLORBYTE( 96 ), COLORBYTE( 4 ) );
@@ -410,4 +434,12 @@ glm::vec3 Planet::CalculateHeigthColor( GLfloat height ) {
 	else if ( height <= 100 ) result = glm::vec3( COLORBYTE( 188 ), COLORBYTE( 203 ), COLORBYTE( 194 ) );
 
 	return result;
+}
+
+void Planet::Update( GLfloat dt ) {
+
+	GLfloat angle = glm::radians( 0.5f ) * dt;
+
+	transform.Rotate( angle, glm::vec3( 0.0f, 1.0f, 0.0f ) );
+
 }

@@ -4,6 +4,7 @@
 #define WINDOW_WIDTH	800
 #define WINDOW_HEIGHT	600
 
+#define FLAT_SHADING	0
 
 #include <iostream>
 #include <string>

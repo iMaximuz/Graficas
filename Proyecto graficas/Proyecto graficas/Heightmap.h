@@ -17,8 +17,6 @@ class Heightmap : public GameObject{
 
 	GLuint gridSize;
 	GLfloat worldSize;
-	GLuint worldSizeX;
-	GLuint worldSizeZ;
 	GLfloat maxHeight;
 
 	MeshRenderMode renderMode;
@@ -32,7 +30,6 @@ public:
 		this->gridSize = gridSize;
 		this->worldSize = worldSize;
 		this->maxHeight = maxHeight;
-		this->worldSizeZ = this->worldSizeX = worldSize / 2;
 
 
 		GenerateNewTerrain( seed, noiseSize, this->gridSize, this->worldSize, this->maxHeight );
@@ -56,8 +53,8 @@ public:
 	glm::vec3 CalculateHeigthColor ( GLfloat height );
 
 
-	inline glm::vec2 GetWorldSize() {
-		return glm::vec2( this->worldSizeX, this->worldSizeZ );
+	inline GLfloat GetWorldSize() {
+		return this->worldSize;
 	}
 
 };

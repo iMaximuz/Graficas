@@ -29,7 +29,7 @@ struct Texture {
 
 enum MeshRenderMode{
 	Mesh_Arrays,
-	Mesh_Element
+	Mesh_Elements
 };
 
 class Mesh {

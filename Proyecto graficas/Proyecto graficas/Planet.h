@@ -9,6 +9,7 @@ class Planet : public GameObject {
 
 	Mesh mesh;
 
+	GLfloat minRad;
 	GLfloat maxRad;
 	GLfloat slices;
 	GLfloat stacks;
@@ -21,12 +22,13 @@ public:
 
 	Planet() {}
 	Planet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
-	Planet( const GLchar* filePath, GLfloat maxRad );
+	Planet( const GLchar* filePath, GLfloat minRad, GLfloat maxRad );
 
-	void LoadHeightMap( const GLchar* filePath, GLfloat maxRad );
+	void LoadHeightMap( const GLchar* filePath, GLfloat minRad, GLfloat maxRad );
 
 	void GenerateNewPlanet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed, GLuint noiseSize );
 
+	void Update( GLfloat dt );
 	void Render( Shader shader );
 
 };

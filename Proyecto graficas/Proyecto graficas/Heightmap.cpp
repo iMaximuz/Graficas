@@ -6,11 +6,6 @@
 void Heightmap::Render( Shader shader )
 {
 
-	/*
-	uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-	*/
 	glUniformMatrix4fv( glGetUniformLocation( shader.program, "model" ), 1, GL_FALSE, glm::value_ptr( this->transform.GetWorldMatrix() ) );
 	mesh.Draw( shader );
 }
@@ -34,7 +29,7 @@ void Heightmap::GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSi
 	glm::vec3* normals = new glm::vec3[gridSize * gridSize * 2];
 	//normals.reserve( gridSize * gridSize * 2 );
 
-	if (this->renderMode == Mesh_Element) {
+	if (this->renderMode == Mesh_Elements) {
 
 		for (int z = 0; z < vertexCount; z++) {
 			for (int x = 0; x < vertexCount; x++) {
@@ -139,7 +134,7 @@ void Heightmap::GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSi
 				vert[1].normal = normal;
 				vert[2].normal = normal;
 
-#if 0
+#if 1
 				vert[0].color = finalColor;
 				vert[1].color = finalColor;
 				vert[2].color = finalColor;
@@ -188,7 +183,7 @@ void Heightmap::GenerateNewTerrain( GLuint seed, GLuint noiseSize, GLuint gridSi
 				vert[2].normal = normal;
 
 
-#if 0
+#if 1
 				vert[0].color = finalColor;
 				vert[1].color = finalColor;
 				vert[2].color = finalColor;
