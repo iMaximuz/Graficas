@@ -26,8 +26,6 @@ void Sphere::GenerateSphere()
 				GLfloat theta = z*PI * 2 / slices;
 				GLfloat phi = x*PI / stacks;
 
-
-				//TODO: Acomodar el orden correcto
 				vert.position.x = rad * cosf(theta)* sinf(phi);
 				vert.position.y = rad * cosf(phi);
 				vert.position.z = rad * sinf(theta)* sinf(phi);

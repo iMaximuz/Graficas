@@ -5,6 +5,14 @@
 #include "Mesh.h"
 #include "GameObject.h"
 
+//TODO: Crear clase para almacenar solo la informacion de una esfera para su modificacion
+
+class SphereData {
+
+	
+
+};
+
 class Sphere : public GameObject{
 
 	Mesh mesh;
