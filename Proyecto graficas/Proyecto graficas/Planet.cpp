@@ -28,7 +28,7 @@ void Planet::LoadHeightMap( const GLchar* filePath,  GLfloat minRad, GLfloat max
 	GLubyte *image;
 	image = SOIL_load_image( filePath, &hMap.sizeX, &hMap.sizeY, 0, SOIL_LOAD_RGB );
 	
-	hMap.data = new GLfloat[hMap.sizeX * hMap.sizeY * 2];
+	hMap.data = new GLfloat[hMap.sizeX * hMap.sizeY + 1];
 
 	int stride = 0;
 	for ( int y = 0; y < hMap.sizeY; y++ ) {
@@ -406,8 +406,8 @@ void Planet::GeneratePlanet(GLuint seed, GLuint noiseSize) {
 }
 
 void Planet::GenerateNewPlanet( GLfloat maxRad, GLfloat slices, GLfloat stacks, GLuint seed = 0, GLuint noiseSize = 16 ){
-	this->maxRad = maxRad;
 	this->slices = slices;
+	this->maxRad = maxRad;
 	this->stacks = stacks;
 	this->renderMode = Mesh_Arrays;
 	GeneratePlanet( seed, noiseSize );
@@ -423,7 +423,7 @@ glm::vec3 Planet::CalculateHeigthColor( GLfloat height ) {
 	glm::vec3 result;
 
 	if ( height <= 10 ) result = glm::vec3( COLORBYTE( 0 ), COLORBYTE( 100 ), COLORBYTE( 200 ) );
-	else if ( height <= 20 ) result = glm::vec3( COLORBYTE( 80 ), COLORBYTE( 54 ), COLORBYTE( 3 ) );
+	else if ( height <= 20 ) result = glm::vec3( COLORBYTE( 0 ), COLORBYTE( 120 ), COLORBYTE( 200 ) );
 	else if ( height <= 30 ) result = glm::vec3( COLORBYTE( 105 ), COLORBYTE( 54 ), COLORBYTE( 3 ) );
 	else if ( height <= 40 ) result = glm::vec3( COLORBYTE( 187 ), COLORBYTE( 96 ), COLORBYTE( 4 ) );
 	else if ( height <= 50 ) result = glm::vec3( COLORBYTE( 114 ), COLORBYTE( 191 ), COLORBYTE( 9 ) );
@@ -442,4 +442,4 @@ void Planet::Update( GLfloat dt ) {
 
 	transform.Rotate( angle, glm::vec3( 0.0f, 1.0f, 0.0f ) );
 
-}
+}	

@@ -163,6 +163,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="NoiseMap.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Shader.h" />

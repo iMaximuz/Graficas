@@ -73,6 +73,7 @@ class NoiseMap {
 public:
 
 	GLfloat* noiseData;
+	
 
 	NoiseMap( GLuint seed, GLint noiseSize, GLint sizeX, GLint sizeY ) {
 		srand( seed );

@@ -84,6 +84,9 @@
     <ClInclude Include="Planet.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files\RenderEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreEngine.cpp">

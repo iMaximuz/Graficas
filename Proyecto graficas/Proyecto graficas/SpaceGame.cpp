@@ -3,6 +3,7 @@
 #include "Heightmap.h"
 #include "Geometry.h"
 #include "Planet.h"
+#include "Particle.h"
 //#include "Model.h"
 
 #define MAX_PLANETS			250
